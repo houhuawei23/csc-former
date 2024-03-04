@@ -1,3 +1,9 @@
 [submodule "csc-20/arm20-0-thu-trivial"]
 	path = csc-20/arm20-0-thu-trivial
 	url = https://github.com/TrivialCompiler/TrivialCompiler.git
+[submodule "csc-20/csc20-1-beike"]
+	path = csc-20/csc20-1-beike
+	url = https://github.com/ustb-owl/MimiC.git
+[submodule "csc-20/arm20-0-ustc-flam"]
+	path = csc-20/arm20-0-ustc-flam
+	url = https://github.com/mlzeng/CSC2020-USTC-FlammingMyCompiler.git
