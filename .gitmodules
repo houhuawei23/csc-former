@@ -31,3 +31,21 @@
 [submodule "csc-23/arm/arm23-n-antlr4"]
 	path = csc-23/arm/arm23-n-antlr4
 	url = https://github.com/Gaomengkai/Vrabche.git
+[submodule "csc-23/riscv/riscv23-0-sustc-cmmc"]
+	path = csc-23/riscv/riscv23-0-sustc-cmmc
+	url = https://gitlab.eduxiji.net/educg-group-17291-1894922/202314325201374-1031
+[submodule "csc-23/riscv/riscv23-1-beili-bnncc"]
+	path = csc-23/riscv/riscv23-1-beili-bnncc
+	url = https://gitlab.eduxiji.net/educg-group-17291-1894922/202310007201692-1245
+[submodule "csc-23/riscv/riscv23-1-zhongshan-yatcc"]
+	path = csc-23/riscv/riscv23-1-zhongshan-yatcc
+	url = https://gitlab.eduxiji.net/educg-group-17291-1894922/202310558201558-3109
+[submodule "csc-23/riscv/riscv23-3-hefei"]
+	path = csc-23/riscv/riscv23-3-hefei
+	url = https://gitlab.eduxiji.net/educg-group-17291-1894922/202310359201848-2384
+[submodule "csc-23/riscv/riscv23-3-nudt-jiuyuan"]
+	path = csc-23/riscv/riscv23-3-nudt-jiuyuan
+	url = https://gitlab.eduxiji.net/educg-group-17291-1894922/202390002201723-738
+[submodule "csc-23/riscv/riscv23-4-huazhong-carrot"]
+	path = csc-23/riscv/riscv23-4-huazhong-carrot
+	url = https://gitlab.eduxiji.net/educg-group-18973-1895971/carrotcompiler
