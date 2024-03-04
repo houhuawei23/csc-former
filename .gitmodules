@@ -1,0 +1,3 @@
+[submodule "csc-20/arm20-0-thu-trivial"]
+	path = csc-20/arm20-0-thu-trivial
+	url = https://github.com/TrivialCompiler/TrivialCompiler.git
