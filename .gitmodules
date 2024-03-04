@@ -16,3 +16,18 @@
 [submodule "csc-22/arm22-3-xbgd"]
 	path = csc-22/arm22-3-xbgd
 	url = https://gitlab.eduxiji.net/educg-group-12619-928705/HammerWang-2412
+[submodule "csc-23/arm/arm23-0-beihang-miaomiao"]
+	path = csc-23/arm/arm23-0-beihang-miaomiao
+	url = https://gitlab.eduxiji.net/educg-group-18973-1895971/compiler2023-202310006201934
+[submodule "csc-23/arm/arm23-1-beihang-atri"]
+	path = csc-23/arm/arm23-1-beihang-atri
+	url = https://gitlab.eduxiji.net/educg-group-18973-1895971/202310006201725-78
+[submodule "csc-23/arm/arm23-4-nudt-lilun"]
+	path = csc-23/arm/arm23-4-nudt-lilun
+	url = https://gitlab.eduxiji.net/educg-group-18973-1895971/202390002201726-1057
+[submodule "csc-23/arm/arm23-4-nudt-women"]
+	path = csc-23/arm/arm23-4-nudt-women
+	url = https://gitlab.eduxiji.net/educg-group-18973-1895971/202390002201745-1165
+[submodule "csc-23/arm/arm23-n-antlr4"]
+	path = csc-23/arm/arm23-n-antlr4
+	url = https://github.com/Gaomengkai/Vrabche.git
