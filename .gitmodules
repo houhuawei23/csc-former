@@ -10,3 +10,9 @@
 [submodule "csc-21/csc21-0-thu-lin"]
 	path = csc-21/csc21-0-thu-lin
 	url = https://github.com/kobayashi-compiler/kobayashi-compiler
+[submodule "csc-22/arm22-3-nudt"]
+	path = csc-22/arm22-3-nudt
+	url = https://gitlab.eduxiji.net/educg-group-12619-928705/RaVincent-2379
+[submodule "csc-22/arm22-3-xbgd"]
+	path = csc-22/arm22-3-xbgd
+	url = https://gitlab.eduxiji.net/educg-group-12619-928705/HammerWang-2412
