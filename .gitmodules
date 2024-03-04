@@ -7,3 +7,6 @@
 [submodule "csc-20/arm20-0-ustc-flam"]
 	path = csc-20/arm20-0-ustc-flam
 	url = https://github.com/mlzeng/CSC2020-USTC-FlammingMyCompiler.git
+[submodule "csc-21/csc21-0-thu-lin"]
+	path = csc-21/csc21-0-thu-lin
+	url = https://github.com/kobayashi-compiler/kobayashi-compiler
