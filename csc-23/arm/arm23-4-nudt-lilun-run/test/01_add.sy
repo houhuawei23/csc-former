@@ -1,0 +1,11 @@
+//test add
+
+int g = 9;
+
+int main(){
+    int a, b;
+    a = 10;
+    b = 2;
+    int c = a;
+    return a + b + c;
+} 
