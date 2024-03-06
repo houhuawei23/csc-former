@@ -1,3 +1,23 @@
+## CSC-Former
+
+
+Open Source Project Collection of Compiler System Design Competition.
+
+Just for Academic Research.
+
+[Compiler System Design Competition Official Website](https://os.educg.net/#/)
+
+### using
+
+```shell
+cd csc-former   
+# init submodules
+git submodule init      
+# update/clone the submodule you want
+# list in .gitmodules
+git submodule update csc-20/csc20-1-beike
+```
+
 ### arm23
 
 - 0-北航-miaomiao：
