@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/sysyc.dir/sysy.cpp.o CMakeFiles/sysyc.dir/IR.cpp.o CMakeFiles/sysyc.dir/SysYIRGenerator.cpp.o CMakeFiles/sysyc.dir/Diagnostic.cpp.o CMakeFiles/sysyc.dir/backend/codegen.cpp.o -o ../../sysyc  -Wl,-rpath,/home/hhw/compilers/csc-former/csc-23/arm/arm23-4-nudt-lilun-run/build/lib ../lib/libSysYParser.so ../lib/libantlr4-runtime.so.4.12.0 
