@@ -26,8 +26,17 @@ file(GLOB_RECURSE ALL_SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.[ch]"
      "${CMAKE_SOURCE_DIR}/src/*.[ch]pp" "${CMAKE_SOURCE_DIR}/test/*.[ch]"
      "${CMAKE_SOURCE_DIR}/test/*.[ch]pp")
 
+# ANTLR
+set(ANTLR_EXECUTABLE "${CMAKE_SOURCE_DIR}/3rd_party/antlr-4.12.0-complete.jar")
+set(ANTLR_RUNTIME "${CMAKE_SOURCE_DIR}/3rd_party/antlr4-runtime")
+
+set(ANTLR4_INSTALL ON)
+set(ANTLR_BUILD_CPP_TESTS OFF) # Only for ANTLR 4.10.0 and later versions
+add_subdirectory(${ANTLR_RUNTIME})
+
 # Add All Includes
 include_directories(
+  "${CMAKE_CURRENT_BINARY_DIR}/src/antlr4"
   "${CMAKE_SOURCE_DIR}/3rd_party/antlr4/include"
   "${CMAKE_SOURCE_DIR}/src/antlr4"
   "${CMAKE_SOURCE_DIR}/src/global"
@@ -40,8 +49,8 @@ include_directories(
 )
 
 # Find Libs
-link_directories("3rd_party/antlr4/lib")
-set(3RD_PARTY_LIBS "libantlr4-runtime.a")
+# link_directories("3rd_party/antlr4/lib")
+# set(3RD_PARTY_LIBS "libantlr4-runtime.a")
 
 # Add Src
 add_subdirectory(src)

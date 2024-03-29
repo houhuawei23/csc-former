@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
   // }
 
 
-  Pass::function_pass_mana.newPass(new Pass::ConstPropagation());
+  // Pass::function_pass_mana.newPass(new Pass::ConstPropagation());
   Pass::function_pass_mana.newPass(new Pass::RenamePass());
 
   for (auto& f : compile_unit.functionTable()) {

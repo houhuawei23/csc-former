@@ -29,7 +29,8 @@ target_link_libraries(
   ir
   global
   util
-  antlr4
+  # antlr4
   # error
-  ${3RD_PARTY_LIBS}
+  # ${3RD_PARTY_LIBS}
+  SysYParser
 )

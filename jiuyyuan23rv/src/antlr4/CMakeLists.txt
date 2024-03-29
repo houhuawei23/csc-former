@@ -1,10 +1,15 @@
-cmake_minimum_required(VERSION 3.16)
+# Generate lexer and parser with ANTLR
+list(APPEND CMAKE_MODULE_PATH "${ANTLR_RUNTIME}/cmake")
 
-project(antlr4)
+include(FindANTLR)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ")
+antlr_target(SysYGen SysY.g4
+  LEXER PARSER
+  OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  VISITOR
+)
 
-aux_source_directory(. ANTLR4_SRC_FILES)
+add_library(SysYParser SHARED ${ANTLR_SysYGen_CXX_OUTPUTS})
+target_include_directories(SysYParser PUBLIC ${ANTLR_RUNTIME}/runtime/src)
+target_link_libraries(SysYParser PUBLIC antlr4_shared)
 
-add_library(antlr4 SHARED ${ANTLR4_SRC_FILES})

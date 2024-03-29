@@ -8,20 +8,25 @@
 #include "reg.hpp"
 
 namespace RISCV {
-
+// register manager
 class Mana {
 protected:
   std::unordered_set<std::unique_ptr<Reg>> regs;
   size_t cnt;
   Reg* get(Reg::DType dtype, size_t id, size_t size_of = 8);
+
   std::unordered_map<IR::AllocaInst*, Reg*> _alloca_reg;
   std::unordered_map<Reg*, IR::AllocaInst*> _reg_alloca;
+
   std::unordered_map<IR::Constant*, Reg*> _constant_reg;
   std::unordered_map<Reg*, IR::Constant*> _reg_constant;
+
   std::unordered_map<IR::GlobalAddr*, Reg*> _global_reg;
   std::unordered_map<Reg*, IR::GlobalAddr*> _reg_global;
+
   std::unordered_map<Reg*, IR::Argument*> _reg_param;
   std::unordered_map<IR::Argument*, Reg*> _param_reg;
+  
   std::unordered_map<IR::Value*, Reg*> _variable_reg;
   std::unordered_map<Reg*, IR::Value*> _reg_variable;
 

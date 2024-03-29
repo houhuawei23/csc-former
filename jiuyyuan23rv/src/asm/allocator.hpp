@@ -17,14 +17,23 @@ public:
   const size_t ALLOCABLE_FREG_MAX = 32;
   Function* function;
   std::unordered_map<Reg*, Reg*> leader;
+
   std::unordered_set<Reg*> precolored;
+  
   std::unordered_set<Reg*> uncolored;
+
   std::unordered_map<Reg*, std::unordered_set<Reg*>> conflict;
+
   std::unordered_map<Reg*, std::unordered_map<Reg*, size_t>> move;
+
   std::vector<std::pair<Reg*, std::vector<Reg*>>> select;
+
   std::unordered_map<Reg*, Reg*> colorinfo;
+
   std::unordered_map<Reg*, double> load_heuristic, store_heuristic;
+
   std::unordered_set<Reg*> spilled;
+
   Allocator(Function* function) : function(function) {
   }
   Reg* getLeader(Reg* reg) {

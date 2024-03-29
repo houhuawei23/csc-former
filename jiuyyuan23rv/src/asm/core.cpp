@@ -113,9 +113,12 @@ Function::Function(Program* program, IR::Function* function)
         bool use = false;
         for (Reg* d : (*it)->defRegs())
           if (reg == d) def = true;
+
         for (Reg* u : (*it)->useRegs())
           if (reg == u) use = true;
+
         if (!use && !def) continue;
+        
         if (use) {  //!
           Reg* t = mana()->vreg(reg->dtype(), reg->sizeOf());
           if (c->type()->isFloat()) {
