@@ -1,0 +1,1926 @@
+InstInfo:
+  IntegerBinaryWithOp2:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rn:GPR[Use], $Op2:Op2[Use]
+    Instances:
+      ADD:
+        Mnemonic: add
+      SUB:
+        Mnemonic: sub
+      AND:
+        Mnemonic: and
+      ORR:
+        Mnemonic: orr
+      EOR:
+        Mnemonic: eor
+      ORN:
+        Mnemonic: orn
+      BIC:
+        Mnemonic: bic
+      RSB:
+        Mnemonic: rsb
+
+  IntegerBinaryWithOp2_FlagSet:
+    Format: "$Mnemonic:Template $Rd:GPR[Def], $Rn:GPR[Use], $Op2:Op2[Use] @ Implicit Def: $CC:CC[Def]"
+    Flag: [MultiDef]
+    Instances:
+      ADDS:
+        Mnemonic: adds
+      SUBS:
+        Mnemonic: subs
+      ANDS:
+        Mnemonic: ands
+      ORRS:
+        Mnemonic: orrs
+      EORS:
+        Mnemonic: eors
+      ORNS:
+        Mnemonic: orns
+      BICS:
+        Mnemonic: bics
+      RSBS:
+        Mnemonic: rsbs
+
+  IntegerBinaryWithOp2_Cond:
+    Format: "$Mnemonic:Template$CF:CondField[Metadata] $Rd:GPR[Def], $Rn:GPR[Use], $Op2:Op2[Use] @ Implicit Use: $CC:CC[Use], $RdUse:GPR[Use]"
+    CustomVerifier: true
+    Instances:
+      ADD_Cond:
+        Mnemonic: add
+      SUB_Cond:
+        Mnemonic: sub
+      AND_Cond:
+        Mnemonic: and
+      ORR_Cond:
+        Mnemonic: orr
+      EOR_Cond:
+        Mnemonic: eor
+      ORN_Cond:
+        Mnemonic: orn
+      BIC_Cond:
+        Mnemonic: bic
+      RSB_Cond:
+        Mnemonic: rsb
+
+  IntegerBinaryWithFullOp2:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rn:GPR[Use], $Rm:GPR[Use], $Op:ShOp[Metadata] $Sh:Shamt[Use]
+    Instances:
+      ADD_Fused:
+        Mnemonic: add
+      SUB_Fused:
+        Mnemonic: sub
+      AND_Fused:
+        Mnemonic: and
+      ORR_Fused:
+        Mnemonic: orr
+      EOR_Fused:
+        Mnemonic: eor
+      ORN_Fused:
+        Mnemonic: orn
+      BIC_Fused:
+        Mnemonic: bic
+      RSB_Fused:
+        Mnemonic: rsb
+
+  MUL:
+    Format: mul $Rd:GPR[Def], $Rm:GPR[Use], $Rs:GPR[Use]
+  SMMUL:
+    Format: smmul $Rd:GPR[Def], $Rm:GPR[Use], $Rs:GPR[Use]
+  SMMLA:
+    Format: smmla $Rd:GPR[Def], $Ry:GPR[Use], $Rz:GPR[Use], $Rw:GPR[Use]
+  FusedMulAddSub:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Ry:GPR[Use], $Rz:GPR[Use], $Rw:GPR[Use]
+    Instances:
+      MLA:
+        Mnemonic: mla
+      MLS:
+        Mnemonic: mls
+
+  IntegerExt:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rm:GPR[Use]
+    Instances:
+      SXTB:
+        Mnemonic: sxtb
+      SXTH:
+        Mnemonic: sxth
+      UXTB:
+        Mnemonic: uxtb
+      UXTH:
+        Mnemonic: uxth
+
+  SDIV:
+    Format: "sdiv $Rd:GPR[Def], $Rn:GPR[Use], $Rm:GPR[Use] @ $LogDividend:Imm[Metadata], $LogDivisor:Imm[Metadata]"
+
+  UDIV:
+    Format: udiv $Rd:GPR[Def], $Rn:GPR[Use], $Rm:GPR[Use]
+
+  SEL:
+    Format: sel $Rd:GPR[Def], $Rn:GPR[Use], $Rm:GPR[Use]
+
+  MoveConstant:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Op2:Op2Constant[Use]
+    Flag: [LoadConstant]
+    Instances:
+      MOV_Constant:
+        Mnemonic: mov
+      MVN_Constant:
+        Mnemonic: mvn
+
+  Move:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Op2:Op2[Use]
+    Instances:
+      MOV:
+        Mnemonic: mov
+      MVN:
+        Mnemonic: mvn
+
+  Move_FlagSet:
+    Format: "$Mnemonic:Template $Rd:GPR[Def], $Op2:Op2[Use] @ Implicit Def: $CC:CC[Def]"
+    Flag: [MultiDef]
+    Instances:
+      MOVS:
+        Mnemonic: movs
+      MVNS:
+        Mnemonic: mvns
+
+  CLZ:
+    Format: clz $Rd:GPR[Def], $Rm:GPR[Use]
+
+  MoveGPR:
+    Format: mov $Rd:GPR[Def], $Rs:GPR[Use]
+    Flag: [RegCopy]
+
+  MoveCond:
+    Format: "$Mnemonic:Template$CF:CondField[Metadata] $Rd:GPR[Def], $Op2:Op2[Use] @ Implicit Use: $CC:CC[Use], $RdUse:GPR[Use]"
+    CustomVerifier: true
+    Instances:
+      MOV_Cond:
+        Mnemonic: mov
+      MVN_Cond:
+        Mnemonic: mvn
+
+  Shift:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rm:GPR[Use], $Sh:Shamt[Use]
+    Instances:
+      ASR:
+        Mnemonic: asr
+      LSL:
+        Mnemonic: lsl
+      LSR:
+        Mnemonic: lsr
+      ROR:
+        Mnemonic: ror
+
+  Comparing:
+    Format: "$Mnemonic:Template $Rn:GPR[Use], $Op2:Op2[Use] @ Implicit Def: $CC:CC[Def]"
+    Instances:
+      CMP:
+        Mnemonic: cmp
+      CMN:
+        Mnemonic: cmn
+
+  B:
+    Format: b $Tgt:Reloc[Metadata]
+    Flag: [Terminator, Branch, NoFallthrough]
+
+  B_Cond:
+    Format: "b$CF:CondField[Metadata] $Tgt:Reloc[Metadata] @ Implicit Use: $CC:CC[Use], Branch Prob: $Prob:Prob[Metadata]"
+    Flag: [Terminator, Branch]
+
+  BL:
+    Format: bl $Tgt:Reloc[Metadata]
+    Flag: [Call]
+
+  BX:
+    Format: bx $Rm:GPR[Use]
+    Flag: [Terminator, NoFallthrough, Return]
+
+  BX_IndirectJump:
+    Format: bx $Tgt:GPR[Use] @ $Table:Reloc[Metadata]
+    Flag: [Terminator, NoFallthrough, IndirectJump]
+
+  VLDR:
+    Format: vldr $Fd:FPR[Def], [$Rn:BaseLike[Use], $Imm:AddrImmVFP[Metadata]]
+    Flag: [Load]
+
+  Load:
+    Format: $Mnemonic:Template $Rd:GPR[Def], [$Rn:BaseLike[Use], $Imm:AddrImm13[Metadata]]
+    Flag: [Load]
+    CustomVerifier: true
+    Instances:
+      LDR:
+        Mnemonic: ldr
+      LDRB:
+        Mnemonic: ldrb
+      LDRSB:
+        Mnemonic: ldrsb
+      LDRH:
+        Mnemonic: ldrh
+      LDRSH:
+        Mnemonic: ldrsh
+
+  LoadFused:
+    Format: $Mnemonic:Template $Rd:GPR[Def], [$Rn:GPR[Use], $Rm:GPR[Use]$Sh:LoadStoreShamt[Metadata]]
+    Flag: [Load]
+    Instances:
+      LDR_Fused:
+        Mnemonic: ldr
+      LDRB_Fused:
+        Mnemonic: ldrb
+      LDRSB_Fused:
+        Mnemonic: ldrsb
+      LDRH_Fused:
+        Mnemonic: ldrh
+      LDRSH_Fused:
+        Mnemonic: ldrsh
+
+  VSTR:
+    Format: vstr $Fd:FPR[Use], [$Rn:BaseLike[Use], $Imm:AddrImmVFP[Metadata]]
+    Flag: [Store]
+
+  StoreFused:
+    Format: $Mnemonic:Template $Rd:GPR[Use], [$Rn:GPR[Use], $Rm:GPR[Use]$Sh:LoadStoreShamt[Metadata]]
+    Flag: [Store]
+    Instances:
+      STR_Fused:
+        Mnemonic: str
+      STRB_Fused:
+        Mnemonic: strb
+      STRH_Fused:
+        Mnemonic: strh
+
+  Store:
+    Format: $Mnemonic:Template $Rd:GPR[Use], [$Rn:BaseLike[Use], $Imm:AddrImm13[Metadata]]
+    Flag: [Store]
+    CustomVerifier: true
+    Instances:
+      STR:
+        Mnemonic: str
+      STRB:
+        Mnemonic: strb
+      STRH:
+        Mnemonic: strh
+
+  MOVW:
+    Format: movw $Rd:GPR[Def], $Imm:UImm16[Metadata]
+    Flag: [LoadConstant]
+  MOVW_Cond:
+    Format: "movw$CF:CondField[Metadata] $Rd:GPR[Def], $Imm:UImm16[Metadata] @ Implicit Use: $CC:CC[Use], $RdUse:GPR[Use]"
+    CustomVerifier: true
+  MOVT:
+    Format: "movt $Rd:GPR[Def], $Imm:UImm16[Metadata] @ Implicit Use: $Rs:GPR[Use]"
+    CustomVerifier: true
+
+  FloatingBinary:
+    Format: $Mnemonic:Template $Fd:FPR[Def], $Fn:FPR[Use], $Fm:FPR[Use]
+    Instances:
+      VADD_F32:
+        Mnemonic: vadd.f32
+      VSUB_F32:
+        Mnemonic: vsub.f32
+      VMUL_F32:
+        Mnemonic: vmul.f32
+      VNMUL_F32:
+        Mnemonic: vnmul.f32
+      VDIV_F32:
+        Mnemonic: vdiv.f32
+
+  FMAInsts:
+    Format: "$Mnemonic:Template $Fd:FPR[Def], $Fn:FPR[Use], $Fm:FPR[Use] @ Implicit Def: $Def:FPR[Use]"
+    CustomVerifier: true
+    Instances:
+      VMLA_F32:
+        Mnemonic: vmla.f32
+      VMLS_F32:
+        Mnemonic: vmls.f32
+      VNMLA_F32:
+        Mnemonic: vnmla.f32
+      VNMLS_F32:
+        Mnemonic: vnmls.f32
+
+  FloatingUnary:
+    Format: $Mnemonic:Template $Fd:FPR[Def], $Fm:FPR[Use]
+    Instances:
+      VNEG_F32:
+        Mnemonic: vneg.f32
+      VABS_F32:
+        Mnemonic: vabs.f32
+
+  VCMP_F32:
+    Format: "vcmp.f32 $Fd:FPR[Use], $Fm:FPR[Use] @ Implicit Def: $CC:FCC[Def]"
+
+  VCMP_F32_WithZero:
+    Format: "vcmp.f32 $Fd:FPR[Use], $Imm:FP32Zero[Metadata] @ Implicit Def: $CC:FCC[Def]"
+
+  TRANSFER_FPSCR_FLAG:
+    Format: vmrs $CC:CC[Def], $FCC:FCC[Use]
+
+  VCVT_F32_S32:
+    Format: vcvt.f32.s32 $Fd:FPR[Def], $Rm:FPR[Use]
+
+  VCVT_S32_F32:
+    Format: vcvt.s32.f32 $Rd:FPR[Def], $Fm:FPR[Use]
+
+  VMOV:
+    Format: vmov.f32 $Fd:FPR[Def], $Fm:FPR[Use]
+    Flag: [RegCopy]
+
+  VMOV_Cond:
+    Format: "vmov$CF:CondField[Metadata].f32 $Fd:FPR[Def], $Fm:FPR[Use] @ Implicit Use: $CC:CC[Use], $FdUse:FPR[Use]"
+    CustomVerifier: true
+
+  VMOV_GPR2FPR:
+    Format: vmov $Sn:FPR[Def], $Rd:GPR[Use]
+
+  VMOV_FPR2GPR:
+    Format: vmov $Rd:GPR[Def], $Sn:FPR[Use]
+
+  VMOV_Constant:
+    Format: vmov.f32 $Fd:FPR[Def], $Imm:FP32[Metadata]
+    Flag: [LoadConstant]
+
+  PUSH:
+    Format: push $List:RegList[Metadata]
+    Flag: [Store, InOrder]
+  VPUSH:
+    Format: vpush $List:RegListVFP[Metadata]
+    Flag: [Store, InOrder]
+
+  POP:
+    Format: pop $List:RegList[Metadata]
+    Flag: [Load, InOrder]
+  POP_RET:
+    Format: pop $List:RegList[Metadata]
+    Flag: [Load, Terminator, NoFallthrough, Return, InOrder]
+  VPOP:
+    Format: vpop $List:RegListVFP[Metadata]
+    Flag: [Load, InOrder]
+
+  USAT:
+    Format: usat $Rd:GPR[Def], $Shift:UImm32[Metadata], $Rm:GPR[Use]
+  SSAT:
+    Format: ssat $Rd:GPR[Def], $Shift:UImm32[Metadata], $Rm:GPR[Use]
+
+  MOVT_MOVW_PAIR:
+    Format: movt_movw_pair $Rd:GPR[Def], $Imm:UImm32OrReloc[Metadata]
+    Flag: [LoadConstant]
+
+  NZCVFlag2GPR:
+    Format: nzcvflag2gpr $Rd:GPR[Def], $CC:CC[Use], $CF:CondField[Metadata]
+    Flag: [LegalizePreRA]
+
+  Select_GPR:
+    Format: select_gpr $Rd:GPR[Def], $Rn:Op2[Use], $Rm:Op2[Use], $CC:CC[Use], $CF:CondField[Metadata]
+    Flag: [LegalizePreRA]
+
+  # if hold: $Rd = $Rn op $Rm
+  # otherwise: $Rd = $Rn
+  CondArith_GPR:
+    Format: cond_arith_gpr $Rd:GPR[Def], $Rn:GPR[Use], $Rm:Op2[Use], $CC:CC[Use], $CF:CondField[Metadata], $Op:Imm[Metadata]
+    Flag: [LegalizePreRA]
+
+  Select_FPR:
+    Format: select_fpr $Rd:FPR[Def], $Rn:FPR[Use], $Rm:FPR[Use], $CC:CC[Use], $CF:CondField[Metadata]
+    Flag: [LegalizePreRA]
+
+  PseudoIntOpWithOp2_Cond:
+    Format: pseudo_int_op_with_op2$CF:CondField[Metadata] $Rd:GPR[Def], $Rn:GPR[Use], $Op2:Op2[Use], $Rm:GPR[Use], $Op:Imm[Metadata], $CC:CC[Use]
+    Flag: [LegalizePreRA]
+
+  PseudoSMaxMin:
+    Format: pseudo_$Mnemonic:Template $Dst:GPR[Def], $Lhs:GPR[Use], $Rhs:Op2[Use], $CC:CC[Use]
+    Flag: [LegalizePreRA]
+    Instances:
+      PseudoSMax:
+        Mnemonic: smax
+      PseudoSMin:
+        Mnemonic: smin
+
+  PseudoSMaxMin_Inverted:
+    Format: pseudo_$Mnemonic:Template $Dst:GPR[Def], $Lhs:GPR[Use], $RhsInverted:Op2[Use], $CC:CC[Use]
+    Flag: [LegalizePreRA]
+    Instances:
+      PseudoSMax_Inverted:
+        Mnemonic: smax_inverted
+      PseudoSMin_Inverted:
+        Mnemonic: smin_inverted
+
+  PseudoFMA:
+    Format: pseudo_fma $Dst:GPR[Def], $X:FPR[Use], $Y:FPR[Use], $Z:FPR[Use], $Op:Imm[Metadata]
+    Flag: [LegalizePreRA]
+
+  UNIMP:
+    Format: .inst 0xdeff
+    Flag: [Terminator, NoFallthrough]
+
+InstSelection:
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: isOperandOp2Constant($Imm)
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      MOV_Constant:
+        Rd: $Dst
+        Op2: $Imm
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: selectInvertedOp2Constant($Imm, [$InvertedImm])
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      MVN_Constant:
+        Rd: $Dst
+        Op2: $InvertedImm
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: selectGenericImm32($Imm, [$UImm])
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      MOVT_MOVW_PAIR:
+        Rd: $Dst
+        Imm: $UImm
+
+  - Pattern:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstAbs:
+            Src: $Val
+        $Predicate: isOperandIReg($Val) && isZero($Lhs)
+    Replace:
+      PseudoIntOpWithOp2_Cond:
+        Rd: $Dst
+        CF: MIROperand::asImm(CondField::PL, OperandType::CondField)
+        Rn: $Val
+        Op2: getZero($Val)
+        Rm: $Val
+        Op: MIROperand::asImm(RSB_Cond, OperandType::Special)
+        CC:
+          CMP:
+            Rn: $Val
+            Op2: getZero($Val)
+            CC: getCC()
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstMul:
+            Dst: $MulDst
+            Lhs: $MulLhs
+            Rhs: $MulRhs
+            $Predicate: isOperandIReg($MulLhs) && ctx.isSafeToUse($MulLhs, $MulDst) && (!isOperandIReg($MulRhs) || ctx.isSafeToUse($MulRhs, $MulDst))
+        $Predicate: isOperandIReg($Lhs) && buildIReg(ctx, $MulRhs, [$OutMulRhs])
+      $Instances: [InstAdd, InstSub]
+    Replace:
+      FusedMulAddSub:
+        $Opcode: "(rootOpcode == InstAdd? MLA: MLS)"
+        $Template: MLA
+        Rd: $Dst
+        Rw: $Lhs
+        Ry: $MulLhs
+        Rz: $OutMulRhs
+
+  - Pattern:
+      InstAnd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstXor:
+            Lhs: $XorLhs
+            Rhs: $Imm
+        $Predicate: isOperandIReg($Lhs) && isOperandOp2($XorLhs) && isNotImm(($Dst).type(), $Imm)
+    Replace:
+      BIC:
+        Rd: $Dst
+        Rn: $Lhs
+        Op2: $XorLhs
+
+  - Pattern:
+      InstXor:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isNegativeOne($Rhs)
+    Replace:
+      MVN:
+        Rd: $Dst
+        Op2: $Lhs
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && selectFusedIntegerBinaryOperand($Rhs, ctx, [$Out], [$ShOp], [$Sh])
+      $Instances: [InstAdd, InstSub, InstAnd, InstOr, InstXor]
+    Replace:
+      IntegerBinaryWithFullOp2:
+        $Opcode: getFusedIntegerBinaryOpcode(rootOpcode)
+        $Template: ADD_Fused
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Out
+        Op: $ShOp
+        Sh: $Sh
+
+  - Pattern:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: selectFusedIntegerBinaryOperand($Lhs, ctx, [$Out], [$ShOp], [$Sh]) && isOperandIReg($Rhs)
+    Replace:
+      RSB_Fused:
+        Rd: $Dst
+        Rn: $Rhs
+        Rm: $Out
+        Op: $ShOp
+        Sh: $Sh
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandOp2($Rhs)
+      $Instances: [InstAdd, InstSub, InstAnd, InstOr, InstXor]
+    Replace:
+      IntegerBinaryWithOp2:
+        $Opcode: getIntegerBinaryOpcode(rootOpcode)
+        $Template: ADD
+        Rd: $Dst
+        Rn: $Lhs
+        Op2: $Rhs
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: selectInvertedOp2Constant($Rhs, [$InvertedImm]) && isOperandIReg($Lhs)
+      $Instances: [InstAnd]
+    Replace:
+      BitwiseAndOrVariant:
+        $Opcode: getBitwiseVariantOpcode(rootOpcode)
+        $Template: BIC
+        Rd: $Dst
+        Rn: $Lhs
+        Op2: $InvertedImm
+
+  - Pattern:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandOp2($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      RSB:
+        Rd: $Dst
+        Rn: $Rhs
+        Op2: $Lhs
+
+  # x * (y + 1) -> x * y + x
+  - Pattern:
+      InstMul:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstAdd:
+            Dst: $AddDst
+            Lhs: $AddLhs
+            Rhs: $AddRhs
+            $Predicate: isOperandIReg($AddLhs) && isOne($AddRhs) && ctx.isSafeToUse($AddLhs, $AddDst)
+        $Predicate: isOperandIReg($Lhs)
+    Replace:
+      MLA:
+        Rd: $Dst
+        Rw: $Lhs
+        Ry: $Lhs
+        Rz: $AddLhs
+
+  # x * (y + 1) -> x * y + x
+  - Pattern:
+      InstMul:
+        Dst: $Dst
+        Rhs: $Lhs
+        Lhs:
+          InstAdd:
+            Dst: $AddDst
+            Lhs: $AddLhs
+            Rhs: $AddRhs
+            $Predicate: isOperandIReg($AddLhs)&& isOne($AddRhs) && ctx.isSafeToUse($AddLhs, $AddDst)
+        $Predicate: isOperandIReg($Lhs)
+    Replace:
+      MLA:
+        Rd: $Dst
+        Rw: $Lhs
+        Ry: $Lhs
+        Rz: $AddLhs
+
+  # x * (1 - y) -> x - x * y
+  - Pattern:
+      InstMul:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstSub:
+            Dst: $SubDst
+            Lhs: $SubLhs
+            Rhs: $SubRhs
+            $Predicate: isOperandIReg($SubRhs) && isOne($SubLhs) && ctx.isSafeToUse($SubRhs, $SubDst)
+        $Predicate: isOperandIReg($Lhs)
+    Replace:
+      MLS:
+        Rd: $Dst
+        Rw: $Lhs
+        Ry: $Lhs
+        Rz: $SubRhs
+
+  # x * (1 - y) -> x - x * y
+  - Pattern:
+      InstMul:
+        Dst: $Dst
+        Rhs: $Lhs
+        Lhs:
+          InstSub:
+            Dst: $SubDst
+            Lhs: $SubLhs
+            Rhs: $SubRhs
+            $Predicate: isOperandIReg($SubRhs) && isOne($SubLhs) && ctx.isSafeToUse($SubRhs, $SubDst)
+        $Predicate: isOperandIReg($Lhs)
+    Replace:
+      MLS:
+        Rd: $Dst
+        Rw: $Lhs
+        Ry: $Lhs
+        Rz: $SubRhs
+
+  - Pattern:
+      InstMul:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      MUL:
+        Rd: $Dst
+        Rm: $Lhs
+        Rs: $Rhs
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && ($Rhs).isImm() && ($Rhs).imm() == 2
+    Replace:
+      ASR:
+        Rd: $Dst
+        Rm:
+          ADD_Fused:
+            Rd: getVRegAs(ctx, $Dst)
+            Rn: $Lhs
+            Rm: $Lhs
+            Op: MIROperand::asImm(LSR, OperandType::ShiftType)
+            Sh: MIROperand::asImm(31, OperandType::Int32)
+        Sh: MIROperand::asImm(1, OperandType::Int32)
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && selectSDiv32ByPowerOf2($Rhs, [$Shift])
+    Replace:
+      ASR:
+        Rd: $Dst
+        Rm:
+          ADD_Fused:
+            Rd: getVRegAs(ctx, $Dst)
+            Rn: $Lhs
+            Rm:
+              ASR:
+                Rd: getVRegAs(ctx, $Dst)
+                Rm: $Lhs
+                Sh: MIROperand::asImm(31, OperandType::Int32)
+            Op: MIROperand::asImm(LSR, OperandType::ShiftType)
+            Sh: MIROperand::asImm(32 - ($Shift).imm(), OperandType::Int32)
+        Sh: $Shift
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstShl:
+            Lhs: $One
+            Rhs: $Shift
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && isOne($One)
+    Replace:
+      ASR:
+        Rd: $Dst
+        Rm:
+          ADD_Fused:
+            Rd: getVRegAs(ctx, $Dst)
+            Rn: $Lhs
+            Rm:
+              ASR:
+                Rd: getVRegAs(ctx, $Dst)
+                Rm: $Lhs
+                Sh: MIROperand::asImm(31, OperandType::Int32)
+            Op: MIROperand::asImm(LSR, OperandType::ShiftType)
+            Sh:
+              InstSub:
+                Dst: getVRegAs(ctx, $Dst)
+                Lhs: MIROperand::asImm(32, OperandType::Int32)
+                Rhs: $Shift
+        Sh: $Shift
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && selectSDiv32ByConstant($Rhs, [$Magic], [$Shift], [$Factor]) && isSDivExpandProfitable($LogDividend, $LogDivisor, $Factor) && buildMulHiImm(ctx, $Lhs, $Magic, $Factor, [$Out]) && buildASR(ctx, $Out, $Shift, [$ASROut])
+    Replace:
+      ADD_Fused:
+        Rd: $Dst
+        Rn: $ASROut
+        Rm: $Out
+        Op: MIROperand::asImm(LSR, OperandType::ShiftType)
+        Sh: MIROperand::asImm(31, OperandType::Int32)
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && !isOperandIReg($Rhs)
+    Replace:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstLoadImm:
+            Dst: getVRegAs(ctx, $Dst)
+            Imm: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SDIV:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+
+  - Pattern:
+      InstUDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      UDIV:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Rhs
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandIReg($Lhs) && isOperandImm($Rhs) && buildIRegShift(ctx, $Rhs, [$RegRhs], [$Shift])
+    Replace:
+      SUB_Fused:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm:
+          InstSDiv:
+            Dst: getVRegAs(ctx, $Dst)
+            Lhs: $Lhs
+            Rhs: $Rhs
+            LogDividend: $LogDividend
+            LogDivisor: $LogDivisor
+            NonNegativeHint: getSDivHint($NonNegativeHint)
+        Op: MIROperand::asImm(LSL, OperandType::ShiftType)
+        Sh: $Shift
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandIReg($Lhs) && isOperandImm($Rhs) && selectSDiv32ByConstant($Rhs, [$Magic], [$Shift], [$Factor]) && isSDivExpandProfitable($LogDividend, $LogDivisor, $Factor)
+    Replace:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstMul:
+            Dst: getVRegAs(ctx, $Dst)
+            Lhs:
+              InstSDiv:
+                Dst: getVRegAs(ctx, $Dst)
+                Lhs: $Lhs
+                Rhs: $Rhs
+                LogDividend: $LogDividend
+                LogDivisor: $LogDivisor
+                NonNegativeHint: getSDivHint($NonNegativeHint)
+            Rhs: $Rhs
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && !isOperandIReg($Rhs) && buildIReg(ctx, $Rhs, [$RegRhs])
+    Replace:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstMul:
+            Dst: getVRegAs(ctx, $Dst)
+            Lhs:
+              SDIV:
+                Rd: getVRegAs(ctx, $Dst)
+                Rn: $Lhs
+                Rm: $RegRhs
+                LogDividend: $LogDividend
+                LogDivisor: $LogDivisor
+            Rhs: $Rhs
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      MLS:
+        Rd: $Dst
+        Rw: $Lhs
+        Ry:
+          SDIV:
+            Rd: getVRegAs(ctx, $Dst)
+            Rn: $Lhs
+            Rm: $Rhs
+            LogDividend: $LogDividend
+            LogDivisor: $LogDivisor
+        Rz: $Rhs
+
+  - Pattern:
+      InstURem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      MLS:
+        Rd: $Dst
+        Rw: $Lhs
+        Ry:
+          UDIV:
+            Rd: getVRegAs(ctx, $Dst)
+            Rn: $Lhs
+            Rm: $Rhs
+        Rz: $Rhs
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandShamt($Rhs)
+      $Instances: [InstShl, InstLShr, InstAShr]
+    Replace:
+      ShiftOperation:
+        $Opcode: getShiftOpcode(rootOpcode)
+        $Template: LSL
+        Rd: $Dst
+        Rm: $Lhs
+        Sh: $Rhs
+
+  - Pattern:
+      InstS2F:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandFPR($Dst) && isOperandIReg($Src)
+    Replace:
+      VCVT_F32_S32:
+        Fd: $Dst
+        Rm:
+          VMOV_GPR2FPR:
+            Sn: getVRegAs(ctx, $Dst)
+            Rd: $Src
+
+  - Pattern:
+      InstF2S:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Dst) && isOperandFPR($Src)
+    Replace:
+      VMOV_FPR2GPR:
+        Rd: $Dst
+        Sn:
+          VCVT_S32_F32:
+            Rd: getVRegAs(ctx, $Src)
+            Fm: $Src
+
+  # - Pattern:
+  #     InstFAdd:
+  #       Dst: $Dst
+  #       Lhs:
+  #         InstFMul:
+  #           Dst: $MulDst
+  #           Lhs: $X
+  #           Rhs: $Y
+  #       Rhs: $Z
+  #   Replace:
+  #     PseudoFMA:
+  #       Dst: $Dst
+  #       X: $X
+  #       Y: $Y
+  #       Z: $Z
+  #       Op: MIROperand::asImm(VMLA_F32, OperandType::Special)
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandFPR($Lhs) && isOperandFPR($Rhs)
+      $Instances: [InstFAdd, InstFSub, InstFMul, InstFDiv]
+    Replace:
+      FloatingBinary:
+        $Opcode: getFloatingBinaryOpcode(rootOpcode)
+        $Template: VADD_F32
+        Fd: $Dst
+        Fn: $Lhs
+        Fm: $Rhs
+
+  - Pattern:
+      InstFNeg:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandFPR($Dst) && isOperandFPR($Src)
+    Replace:
+      VNEG_F32:
+        Fd: $Dst
+        Fm: $Src
+
+  - Pattern:
+      VMOV_FPR2GPR:
+        Rd: $Dst
+        Sn:
+          VMOV_GPR2FPR:
+            Rd: $Src
+            Sn: $Intermediate
+            $Predicate: ctx.isSafeToUse($Intermediate, $Intermediate) && ctx.isSafeToUse($Src, $Intermediate) && isOperandVReg($Src)
+    Replace:
+      InstCopyToReg:
+        Dst: $Dst
+        Src: $Src
+
+  - Pattern:
+      VMOV_GPR2FPR:
+        Sn: $Dst
+        Rd:
+          VMOV_FPR2GPR:
+            Sn: $Src
+            Rd: $Intermediate
+            $Predicate: ctx.isSafeToUse($Intermediate, $Intermediate) && ctx.isSafeToUse($Src, $Intermediate) && isOperandVReg($Src)
+    Replace:
+      VMOV:
+        Fd: $Dst
+        Fm: $Src
+
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandBoolReg($Src)
+    Replace:
+      InstCopy:
+        Dst: $Dst
+        Src: $Src
+
+  - Pattern:
+      InstSExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src)
+    Replace:
+      InstCopy:
+        Dst: $Dst
+        Src: $Src
+
+  - Pattern:
+      InstLoadGlobalAddress:
+        Dst: $Dst
+        Addr: $Addr
+    Replace:
+      MOVT_MOVW_PAIR:
+        Rd: $Dst
+        Imm: $Addr
+
+  - Pattern:
+      InstJump:
+        Tgt: $Tgt
+    Replace:
+      B:
+        Tgt: $Tgt
+
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Cond
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && ctx.isSafeToUse($Lhs, $Cond) && (!isOperandIReg($Rhs) || ctx.isSafeToUse($Rhs, $Cond)) && selectCompareOp2($Rhs, [$Out], [$IsOpposite])
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      B_Cond:
+        CC:
+          Compare:
+            $Opcode: getCompareOpcode(($IsOpposite).imm())
+            $Template: CMP
+            Rn: $Lhs
+            Op2: $Out
+            CC: getCC()
+        CF: getCondFieldICmp($Op)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  - Pattern:
+      InstBranch:
+        Cond:
+          NZCVFlag2GPR:
+            Rd: $Cond
+            CC: $CC
+            CF: $CF
+            $Predicate: isOperandIReg($Cond) && ctx.isSafeToUse($CC, $Cond)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      B_Cond:
+        CC: $CC
+        CF: $CF
+        Tgt: $Reloc
+        Prob: $Prob
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond:
+          InstICmp:
+            Dst: $Cond
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && ctx.isSafeToUse($Lhs, $Cond) && (!isOperandIReg($Rhs) || ctx.isSafeToUse($Rhs, $Cond)) && selectCompareOp2($Rhs, [$Out], [$IsOpposite])
+        Lhs: $LVal
+        Rhs: $RVal
+        $Predicate: isOperandIReg($Dst) && isOperandOp2($LVal) && isOperandOp2($RVal)
+    Replace:
+      Select_GPR:
+        Rd: $Dst
+        Rn: $LVal
+        Rm: $RVal
+        CC:
+          Compare:
+            $Opcode: getCompareOpcode(($IsOpposite).imm())
+            $Template: CMP
+            Rn: $Lhs
+            Op2: $Out
+            CC: getCC()
+        CF: getCondFieldICmp($Op)
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond:
+          InstICmp:
+            Dst: $Cond
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && ctx.isSafeToUse($Lhs, $Cond) && (!isOperandIReg($Rhs) || ctx.isSafeToUse($Rhs, $Cond)) && selectCompareOp2($Rhs, [$Out], [$IsOpposite])
+        Lhs: $LVal
+        Rhs: $RVal
+        $Predicate: isOperandFPR($Dst)
+    Replace:
+      Select_FPR:
+        Rd: $Dst
+        Rn: $LVal
+        Rm: $RVal
+        CC:
+          Compare:
+            $Opcode: getCompareOpcode(($IsOpposite).imm())
+            $Template: CMP
+            Rn: $Lhs
+            Op2: $Out
+            CC: getCC()
+        CF: getCondFieldICmp($Op)
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond:
+          NZCVFlag2GPR:
+            Rd: $Cond
+            CC: $CC
+            CF: $CF
+            $Predicate: ctx.isSafeToUse($CC, $Cond)
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Dst) && isOperandOp2($Lhs) && isOperandOp2($Rhs)
+    Replace:
+      Select_GPR:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Rhs
+        CC: $CC
+        CF: $CF
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond:
+          NZCVFlag2GPR:
+            Rd: $Cond
+            CC: $CC
+            CF: $CF
+            $Predicate: ctx.isSafeToUse($CC, $Cond)
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandFPR($Dst)
+    Replace:
+      Select_FPR:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Rhs
+        CC: $CC
+        CF: $CF
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isCompareOp($Op, CompareOp::ICmpEqual) && buildSub(ctx, $Lhs, $Rhs, [$Out])
+    Replace:
+      LSR:
+        Rd: $Dst
+        Rm:
+          CLZ:
+            Rd: getVRegAs(ctx, $Dst)
+            Rm: $Out
+        Sh: MIROperand::asImm(5, OperandType::Int32)
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isCompareOp($Op, CompareOp::ICmpSignedGreaterThan) && isOperandIReg($Lhs) && isNegativeOne($Rhs)
+    Replace:
+      LSR:
+        Rd: $Dst
+        Rm:
+          MVN:
+            Rd: getVRegAs(ctx, $Dst)
+            Op2: $Lhs
+        Sh: MIROperand::asImm(31, OperandType::Int32)
+
+  # Fallbacks for cmp/branch/select
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && selectCompareOp2($Rhs, [$Out], [$IsOpposite])
+    Replace:
+      NZCVFlag2GPR:
+        Rd: $Dst
+        CC:
+          Compare:
+            $Opcode: getCompareOpcode(($IsOpposite).imm())
+            $Template: CMP
+            Rn: $Lhs
+            Op2: $Out
+            CC: getCC()
+        CF: getCondFieldICmp($Op)
+
+  - Pattern:
+      InstFCmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          VMOV_GPR2FPR:
+            Rd:
+              InstLoadImm:
+                Imm: $Imm
+        Op: $Op
+        $Predicate: isOperandFPR($Lhs) && isZero($Imm)
+    Replace:
+      NZCVFlag2GPR:
+        Rd: $Dst
+        CC:
+          TRANSFER_FPSCR_FLAG:
+            CC: getCC()
+            FCC:
+              VCMP_F32_WithZero:
+                Fd: $Lhs
+                CC: getFCC()
+                Imm: MIROperand::asImm(0, OperandType::Float32)
+        CF: getCondFieldFCmp($Op)
+
+  - Pattern:
+      InstFCmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandFPR($Lhs) && isOperandFPR($Rhs)
+    Replace:
+      NZCVFlag2GPR:
+        Rd: $Dst
+        CC:
+          TRANSFER_FPSCR_FLAG:
+            CC: getCC()
+            FCC:
+              VCMP_F32:
+                Fd: $Lhs
+                Fm: $Rhs
+                CC: getFCC()
+        CF: getCondFieldFCmp($Op)
+
+  - Pattern:
+      InstBranch:
+        Cond: $Cond
+        Tgt: $Reloc
+        Prob: $Prob
+        $Predicate: isOperandIReg($Cond) && isNotCmp(ctx, $Cond)
+    Replace:
+      B_Cond:
+        Tgt: $Reloc
+        Prob: $Prob
+        CC:
+          CMP:
+            CC: getCC()
+            Rn: $Cond
+            Op2: getZero($Cond)
+        CF: MIROperand::asImm(CondField::NE, OperandType::CondField)
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond: $Cond
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Dst) && isOperandOp2($Lhs) && isOperandOp2($Rhs) && isNotCmp(ctx, $Cond)
+    Replace:
+      Select_GPR:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Rhs
+        CC:
+          CMP:
+            Rn: $Cond
+            Op2: getZero($Cond)
+            CC: getCC()
+        CF: MIROperand::asImm(CondField::NE, OperandType::CondField)
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond: $Cond
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandFPR($Dst) && isNotCmp(ctx, $Cond)
+    Replace:
+      Select_FPR:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Rhs
+        CC:
+          CMP:
+            Rn: $Cond
+            Op2: getZero($Cond)
+            CC: getCC()
+        CF: MIROperand::asImm(CondField::NE, OperandType::CondField)
+
+  # Load/Store
+  - Pattern:
+      InstLoad:
+        Dst: $Dst
+        Addr: $Addr
+        $Predicate: isOperandIReg($Dst) && selectFusedAddrOffset($Addr, ctx, $Dst, [$Base], [$Index], [$Scale])
+    Replace:
+      LoadFused:
+        $Opcode: getFusedLoadOpcode($Dst)
+        $Template: LDR_Fused
+        Rd: $Dst
+        Rn: $Base
+        Rm: $Index
+        Sh: $Scale
+
+  - Pattern:
+      InstLoad:
+        Dst: $Dst
+        Addr: $Addr
+        $Predicate: selectAddrOffset($Addr, ctx, [$Base], [$Offset], getLoadOpcode($Dst), ($Dst).type())
+    Replace:
+      Load:
+        $Opcode: getLoadOpcode($Dst)
+        $Template: LDR
+        Rd: $Dst
+        Rn: $Base
+        Imm: $Offset
+
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src:
+          InstLoad:
+            Dst: $Val
+            Addr: $Addr
+            $Predicate: ctx.isSafeToUse($Addr, $Val) && selectAddrOffset($Addr, ctx, [$Base], [$Offset], getZExtLoadOpcode($Val), ($Val).type())
+    Replace:
+      Load:
+        $Opcode: getZExtLoadOpcode($Val)
+        $Template: LDRB
+        Rd: $Dst
+        Rn: $Base
+        Imm: $Offset
+
+  - Pattern:
+      InstStore:
+        Src:
+          InstTrunc:
+            Dst: $Dst
+            Src: $Src
+            $Predicate: ctx.isSafeToUse($Src, $Dst)
+        Addr: $Addr
+        $Predicate: isOperandIReg($Src) && selectFusedAddrOffset($Addr, ctx, $Dst, [$Base], [$Index], [$Scale])
+    Replace:
+      StoreFused:
+        $Opcode: getFusedStoreOpcode($Dst)
+        $Template: STR_Fused
+        Rd: $Src
+        Rn: $Base
+        Rm: $Index
+        Sh: $Scale
+
+  - Pattern:
+      InstStore:
+        Src: $Src
+        Addr: $Addr
+        $Predicate: isOperandIReg($Src) && selectFusedAddrOffset($Addr, ctx, $Src, [$Base], [$Index], [$Scale])
+    Replace:
+      StoreFused:
+        $Opcode: getFusedStoreOpcode($Src)
+        $Template: STR_Fused
+        Rd: $Src
+        Rn: $Base
+        Rm: $Index
+        Sh: $Scale
+
+  - Pattern:
+      InstStore:
+        Src:
+          InstTrunc:
+            Dst: $Dst
+            Src: $Src
+            $Predicate: ctx.isSafeToUse($Src, $Dst)
+        Addr: $Addr
+        $Predicate: isOperandVRegOrISAReg($Src) && selectAddrOffset($Addr, ctx, [$Base], [$Offset], getStoreOpcode($Dst), ($Dst).type())
+    Replace:
+      Store:
+        $Opcode: getStoreOpcode($Dst)
+        $Template: STR
+        Rd: $Src
+        Rn: $Base
+        Imm: $Offset
+
+  - Pattern:
+      InstStore:
+        Src: $Src
+        Addr: $Addr
+        $Predicate: isOperandVRegOrISAReg($Src) && selectAddrOffset($Addr, ctx, [$Base], [$Offset], getStoreOpcode($Src), ($Src).type())
+    Replace:
+      Store:
+        $Opcode: getStoreOpcode($Src)
+        $Template: STR
+        Rd: $Src
+        Rn: $Base
+        Imm: $Offset
+
+  - Pattern:
+      InstUnreachable:
+    Replace:
+      UNIMP:
+
+  - Pattern:
+      InstAbs:
+        Dst: $Dst
+        Src: $Val
+        $Predicate: isOperandIReg($Val)
+    Replace:
+      PseudoIntOpWithOp2_Cond:
+        Rd: $Dst
+        CF: MIROperand::asImm(CondField::MI, OperandType::CondField)
+        Rn: $Val
+        Op2: getZero($Val)
+        Rm: $Val
+        Op: MIROperand::asImm(RSB_Cond, OperandType::Special)
+        CC:
+          CMP:
+            Rn: $Val
+            Op2: getZero($Val)
+            CC: getCC()
+
+  - Pattern:
+      RSB:
+        Rd: $Dst
+        Rn:
+          RSB_Fused:
+            Rd: $Val
+            Rn: $Rn
+            Rm: $Rm
+            Op: $Op
+            Sh: $Sh
+            $Predicate: ctx.hasOneUse($Val)
+        Op2: $Zero
+        $Predicate: isZero($Zero)
+    Replace:
+      SUB_Fused:
+        Rd: $Dst
+        Rn: $Rn
+        Rm: $Rm
+        Op: $Op
+        Sh: $Sh
+
+  - Pattern:
+      InstSMax:
+        Dst: $Dst
+        Lhs:
+          InstSMin:
+            Lhs: $Src
+            Rhs: $Upper
+        Rhs: $Lower
+        $Predicate: isOperandIReg($Src) && isZero($Lower) && selectUnsignedRange($Upper, [$Shift])
+    Replace:
+      USAT:
+        Rd: $Dst
+        Shift: $Shift
+        Rm: $Src
+
+  - Pattern:
+      InstSMin:
+        Dst: $Dst
+        Lhs:
+          InstSMax:
+            Lhs: $Src
+            Rhs: $Lower
+        Rhs: $Upper
+        $Predicate: isOperandIReg($Src) && isZero($Lower) && selectUnsignedRange($Upper, [$Shift])
+    Replace:
+      USAT:
+        Rd: $Dst
+        Shift: $Shift
+        Rm: $Src
+
+  - Pattern:
+      InstSMax:
+        Dst: $Dst
+        Lhs:
+          InstSMin:
+            Lhs: $Src
+            Rhs: $Upper
+        Rhs: $Lower
+        $Predicate: isOperandIReg($Src) && selectSignedRange($Lower, $Upper, [$Shift])
+    Replace:
+      SSAT:
+        Rd: $Dst
+        Shift: $Shift
+        Rm: $Src
+
+  - Pattern:
+      InstSMin:
+        Dst: $Dst
+        Lhs:
+          InstSMax:
+            Lhs: $Src
+            Rhs: $Lower
+        Rhs: $Upper
+        $Predicate: isOperandIReg($Src) && selectSignedRange($Lower, $Upper, [$Shift])
+    Replace:
+      SSAT:
+        Rd: $Dst
+        Shift: $Shift
+        Rm: $Src
+
+  - Pattern:
+      InstSMax:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isZero($Rhs)
+    Replace:
+      BIC_Fused:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $Lhs
+        Op: MIROperand::asImm(ASR, OperandType::ShiftType)
+        Sh: MIROperand::asImm(31, OperandType::Int32)
+
+  - Pattern:
+      InstSMax:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandOp2($Rhs)
+    Replace:
+      PseudoSMax:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        CC:
+          CMP:
+            Rn: $Lhs
+            Op2: $Rhs
+            CC: getCC()
+
+  - Pattern:
+      InstSMin:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandOp2($Rhs)
+    Replace:
+      PseudoSMin:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        CC:
+          CMP:
+            Rn: $Lhs
+            Op2: $Rhs
+            CC: getCC()
+
+  - Pattern:
+      InstSMax:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && selectInvertedOp2Constant($Rhs, [$InvertedRhs])
+    Replace:
+      PseudoSMax_Inverted:
+        Dst: $Dst
+        Lhs: $Lhs
+        RhsInverted: $InvertedRhs
+        CC:
+          CMN:
+            Rn: $Lhs
+            Op2: $InvertedRhs
+            CC: getCC()
+
+  - Pattern:
+      InstSMin:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && selectInvertedOp2Constant($Rhs, [$InvertedRhs])
+    Replace:
+      PseudoSMin_Inverted:
+        Dst: $Dst
+        Lhs: $Lhs
+        RhsInverted: $InvertedRhs
+        CC:
+          CMN:
+            Rn: $Lhs
+            Op2: $InvertedRhs
+            CC: getCC()
+
+  - Pattern:
+      InstFAbs:
+        Dst: $Dst
+        Src: $Src
+    Replace:
+      VABS_F32:
+        Fd: $Dst
+        Fm: $Src
+
+  # add x1, select(cf, x3, 0) -> add_cond cf, x1,
+  - Pattern:
+      $Template:
+        Rd: $Dst
+        Rn: $Lhs
+        Op2:
+          Select_GPR:
+            Rd: $Rhs
+            Rn: $TrueV
+            Rm: $FalseV
+            CC: $CC
+            CF: $CF
+            $Predicate: isZero($FalseV) && ctx.hasOneUse($Rhs) && ctx.isSafeToUse($CC, $Rhs)
+      $Instances: [ADD, SUB, ORR, EOR]
+    Replace:
+      CondArith_GPR:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $TrueV
+        CC: $CC
+        CF: $CF
+        Op: MIROperand::asImm(rootOpcode, OperandType::Special)
+
+  - Pattern:
+      $Template:
+        Rd: $Dst
+        Rn: $Lhs
+        Op2:
+          Select_GPR:
+            Rd: $Rhs
+            Rn: $TrueV
+            Rm: $FalseV
+            CC: $CC
+            CF: $CF
+            $Predicate: isZero($TrueV) && ctx.hasOneUse($Rhs) && ctx.isSafeToUse($CC, $Rhs)
+      $Instances: [ADD, SUB, ORR, EOR]
+    Replace:
+      CondArith_GPR:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: $FalseV
+        CC: $CC
+        CF: getInvertedCondField($CF)
+        Op: MIROperand::asImm(rootOpcode, OperandType::Special)
+
+  - Pattern:
+      $Template:
+        Rd: $Dst
+        Rn: $Lhs
+        Op2:
+          NZCVFlag2GPR:
+            Rd: $Rhs
+            CC: $CC
+            CF: $CF
+            $Predicate: ctx.isSafeToUse($CC, $Rhs)
+      $Instances: [ADD, SUB, ORR, EOR]
+    Replace:
+      CondArith_GPR:
+        Rd: $Dst
+        Rn: $Lhs
+        Rm: MIROperand::asImm(1, OperandType::Int32)
+        CC: $CC
+        CF: $CF
+        Op: MIROperand::asImm(rootOpcode, OperandType::Special)
+
+  # For csmith
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src)
+    Replace:
+      ZExt:
+        $Opcode: getZExtOpcode(($Src).type())
+        $Template: UXTB
+        Rd: $Dst
+        Rm: $Src
+
+  - Pattern:
+      InstTrunc:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src)
+    Replace:
+      ZExt:
+        $Opcode: getSExtOpcode(($Dst).type())
+        $Template: SXTB
+        Rd: $Dst
+        Rm: $Src
+
+ScheduleModel:
+  cortex_a72:
+    CustomPeepholeOpt: true
+    Classes:
+      IntegerArithmetic: # latency: 1, throughput: 2, pipeline: I0/I1
+        # 3.3 Arithmetic and Logical Instructions
+        - ADD
+        - SUB
+        - AND
+        - ORR
+        - EOR
+        - ORN
+        - BIC
+        - RSB
+        - ADDS
+        - SUBS
+        - ANDS
+        - ORRS
+        - EORS
+        - ORNS
+        - BICS
+        - RSBS
+        - CMP
+        - CMN
+        - InstLoadStackObjectAddr
+        # 3.4 Move and Shift Instructions
+        - MOV_Constant
+        - MVN_Constant
+        - MOV
+        - MVN
+        - MOVW
+        - MOVT
+        - MOVT_MOVW_PAIR # Fused
+        - MoveGPR
+        - ASR
+        - LSL
+        - LSR
+        - ROR
+        - InstLoadImm
+        # 3.7 Miscellaneous Data-Processing Instructions
+        - SXTB
+        - SXTH
+        - UXTB
+        - UXTH
+        - SEL
+        - CLZ
+      IntegerArithmeticConditional: # latency: 2, throughput: 1, pipeline: I0/I1
+        # 3.3 Arithmetic and Logical Instructions
+        - ADD_Cond
+        - SUB_Cond
+        - AND_Cond
+        - ORR_Cond
+        - EOR_Cond
+        - ORN_Cond
+        - BIC_Cond
+        - RSB_Cond
+        # 3.4 Move and Shift Instructions
+        - MOV_Cond
+        - MVN_Cond
+        - MOVW_Cond
+      IntegerArithmeticFused: # latency: 2, throughput: 1, pipeline: M
+        # 3.3 Arithmetic and Logical Instructions
+        - ADD_Fused
+        - SUB_Fused
+        - AND_Fused
+        - ORR_Fused
+        - EOR_Fused
+        - ORN_Fused
+        - BIC_Fused
+        - RSB_Fused
+      Saturate: # latency: 2, throughput: 1, pipeline: M
+        # 3.6 Saturating and Parallel Arithmetic Instructions
+        - USAT
+        - SSAT
+      Multiply: # latency: 3, throughput: 1, pipeline: M
+        # 3.5 Divide and Multiply Instructions
+        - MUL
+        - SMMUL
+      MultiplyAccumulate: # latency: 3(1), throughput: 1, pipeline: M
+        - MLA
+        - MLS
+        - SMMLA
+      Divide: # latency: 4-12, throughput: 1/latency, pipeline: M
+        - UDIV
+      SignedDivide: # latency: 4-12, throughput: 1/latency, pipeline: M
+        - SDIV
+      Branch: # latency: 1, throughput: 1, pipeline: B
+        # 3.2 Branch Instructions
+        - B
+        - B_Cond
+        - BX
+        - BX_IndirectJump
+      BranchLink: # latency: 1, throughput: 1, pipeline: B + I0/I1
+        - BL
+      FPLoad: # latency: 4+N, throughput: 1/N, pipeline: L
+        # 3.12 FP Load Instructions
+        - VLDR # N=1
+      FPLoadPop: # same as above
+        - VPOP
+      Load: # latency: 4, throughput: 1, pipeline: L
+        # 3.8 Load Instructions
+        #   Load, immed offset
+        - LDR
+        - LDRB
+        - LDRH
+        - LDRSB
+        - LDRSH
+      LoadScaledLSL2: # latency: 4, throughput: 1, pipeline: L
+        #   Load, scaled register offset, plus immed/LSL2 (minus +1)
+        - LDR_Fused
+        - LDRB_Fused
+      LoadScaledOther: # latency: 5, throughput: 1, pipeline: L
+        #   Load, scaled register offset, other
+        - LDRH_Fused
+        - LDRSB_Fused
+        - LDRSH_Fused
+      Pop: # latency: 3+N(1), throughput: 1/N, pipeline: L + I0/I1
+        #   Load multiple, writeback
+        - POP
+        - POP_RET
+      Store: # latency: 1, throughput: 1, pipeline: S
+        # 3.9 Store Instructions
+        #   Store, immed offset, or plus, ...
+        - STR
+        - STRB
+        - STRH
+        - STR_Fused
+        - STRB_Fused
+        - STRH_Fused
+        # 3.13 FP Store Instructions
+        - VSTR # N=1
+        # general
+        - InstStoreRegToStack
+      Push: # latency: N(1), throughput: 1/N, pipeline: S + I0/I1
+        #   Store multiple, writeback
+        - PUSH
+        # 3.13 FP Store Instructions
+        - VPUSH
+      FPArithmetic: # latency: 4, throughput: 2, pipeline: F0/F1
+        # 3.10 FP Data Processing Instructions
+        - VADD_F32
+        - VSUB_F32
+        - VMUL_F32
+        - VNMUL_F32
+        # 3.11 FP Miscellaneous Instructions
+        - VMOV
+        - VMOV_Cond
+        - VMOV_Constant
+      FPUnaryArithmetic: # latency: 3, throughput: 2, pipeline: F0/F1
+        # 3.10 FP Data Processing Instructions
+        - VABS_F32
+        - VNEG_F32
+      FPDivide: # S-form, latency: 6-11, throughput: 2/9-1/2, pipeline: F0
+        - VDIV_F32
+      FPCompare: # latency: 3, throughput: 1, pipeline: F1
+        - VCMP_F32
+        - VCMP_F32_WithZero
+      FPConvert: # latency: 3, throughput: 1, pipeline: F0
+        - VCVT_F32_S32
+        - VCVT_S32_F32
+      FPMoveWithCore: # latency: 5, throughput: 1, pipeline: L
+        # 3.11 FP Miscellaneous Instructions
+        - VMOV_GPR2FPR
+        - VMOV_FPR2GPR
+      FPFma: # latency: 7(3), throughput: 2, pipeline: F0/F1
+        # 3.10 FP Data Processing Instructions
+        - VMLA_F32
+        - VMLS_F32
+        - VNMLA_F32
+        - VNMLS_F32
+      Misc: # unknown
+        - TRANSFER_FPSCR_FLAG
+        - UNIMP
+      GeneralMove:
+        - InstCopy
+        - InstCopyFromReg
+        - InstCopyToReg
+      GeneralLoad:
+        - InstLoadRegFromStack

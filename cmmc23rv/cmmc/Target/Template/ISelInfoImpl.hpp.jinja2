@@ -1,0 +1,72 @@
+/*
+    SPDX-License-Identifier: Apache-2.0
+    Copyright 2023 CMMC Authors
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+// Automatically generated file, do not edit!
+
+#include <{{target}}/ISelInfoDecl.hpp>
+
+CMMC_TARGET_NAMESPACE_BEGIN
+
+{% for inst in match_insts %}
+static bool match{{inst}}(MIRInst& inst{% for operand in inst_map[inst].operands %}, MIROperand& {{operand.name}}{% endfor %}) {
+    if(inst.opcode() != {{inst}})
+        return false;
+    {% for operand in inst_map[inst].operands %}{{operand.name}}=inst.getOperand({{operand.idx}});{% endfor %}
+    return true;
+}
+{% endfor %}
+
+{% for patterns in isel_patterns.values() %}{% for pattern in patterns %}
+static bool matchAndSelectPattern{{pattern.match_id}}(MIRInst& inst{{pattern.match_id}}, ISelContext& ctx) {
+    constexpr uint32_t rootOpcode = {{pattern.match_inst}};CMMC_UNUSED(rootOpcode);
+    // Match
+    {% for match in pattern.match_list %}{% if match.type == 'match_inst' %}{% for operand_idx in match.capture_list %} MIROperand op{{operand_idx}}; {% endfor %}if(!match{{match.inst}}(inst{{match.root}}{% for operand_idx in match.capture_list %},op{{operand_idx}}{% endfor %}))return false;{% for lookup_idx in match.lookup_list %} auto instptr{{lookup_idx}} = ctx.lookupDef(op{{lookup_idx}}); if(!instptr{{lookup_idx}}) return false; auto& inst{{lookup_idx}} = *instptr{{lookup_idx}}; {% endfor %}{% else %} {% for op in match.new_ops %} MIROperand op{{op}}; {% endfor %} if(!({{match.code}}))return false;{% endif %}{% endfor %}
+    // Select
+    {% for select in pattern.select_list %}{% if select.type == 'select_inst' %}auto& inst{{select.idx}} = ctx.newInst({{select.inst}}){% for operand in select.operands %}.setOperand<{{loop.index0}}>({% if operand is integer %}op{{operand}}{%else%}{{operand}}{%endif%}){%endfor%};{% if select.used_as_operand %}auto& op{{select.idx}} = ctx.getInstDef(inst{{select.idx}});{% endif %}{% else %}auto op{{select.idx}} = ({{select.code}});{% endif %}{% endfor %}
+    {% if pattern.replace_operand %} ctx.replaceOperand(ctx.getInstDef(inst{{pattern.match_id}}), ctx.getInstDef(inst{{pattern.replace_id}})); {% else %} CMMC_UNUSED(inst{{pattern.replace_id}}); {% endif %}
+    ctx.removeInst(inst{{pattern.match_id}});
+    return true;
+}
+{% endfor %}{% endfor %}
+
+static bool matchAndSelectImpl(MIRInst& inst, ISelContext& ctx) {
+    switch(inst.opcode()) {
+    {% for inst, patterns in isel_patterns.items() %}case {{inst}}: {
+        {% for pattern in patterns %}if(matchAndSelectPattern{{pattern.match_id}}(inst, ctx))return true;{% endfor %}
+        break;
+    }{% endfor %}
+    default:
+        break;
+    }
+    return false;
+}
+
+class {{target}}ISelInfo final: public TargetISelInfo {
+public:
+    [[nodiscard]] bool isLegalGenericInst(uint32_t opcode) const override;
+    bool matchAndSelect(MIRInst& inst, ISelContext& ctx, bool allowComplexPattern) const override;
+    void postLegalizeInst(const InstLegalizeContext& ctx) const override;
+    void postLegalizeInstSeq(const CodeGenContext& ctx, MIRInstList& instructions) const override;
+    void preRALegalizeInst(const InstLegalizeContext& ctx) const override;
+    void legalizeInstWithStackOperand(const InstLegalizeContext& ctx, MIROperand& op, const StackObject& obj) const override;
+    MIROperand materializeFPConstant(ConstantFloatingPoint* fp, LoweringContext& loweringCtx) const override;
+    bool lowerInst(Instruction* inst, LoweringContext& loweringCtx) const override;
+    void lowerIndirectJump(MIRJumpTable* jumpTable, const MIROperand& offset, LoweringContext& ctx) const override;
+};
+
+const TargetISelInfo& get{{target}}ISelInfo() {
+    static {{target}}ISelInfo iselInfo;
+    return iselInfo;
+}
+
+CMMC_TARGET_NAMESPACE_END

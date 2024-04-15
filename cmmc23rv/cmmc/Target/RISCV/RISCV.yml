@@ -1,0 +1,2294 @@
+InstInfo:
+  # RV32I Base Integer Instruction Set
+  RType:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:GPR[Use], $Rs2:GPR[Use]
+  R2Type:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:GPR[Use]
+  IType:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:GPR[Use], $Imm:Imm12[Metadata]
+  UType:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Imm:UImm20[Metadata]
+
+  ## 2.4 Integer Computational Instructions
+  InstanceRII:
+    Template: IType
+    ADDI:
+      Mnemonic: addi
+    SLTI:
+      Mnemonic: slti
+    SLTIU:
+      Mnemonic: sltiu
+    ANDI:
+      Mnemonic: andi
+    ORI:
+      Mnemonic: ori
+    XORI:
+      Mnemonic: xori
+  ShiftImm:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:GPR[Use], $Imm:UImm6[Metadata]
+    Instances:
+      SLLI:
+        Mnemonic: slli
+      SRLI:
+        Mnemonic: srli
+      SRAI:
+        Mnemonic: srai
+  InstanceRIU:
+    Template: UType
+    LUI:
+      Mnemonic: lui
+      Flag: [LoadConstant]
+    AUIPC:
+      Mnemonic: auipc
+      Flag: [PCRel, LoadConstant]
+  InstanceRRR:
+    Template: RType
+    ADD:
+      Mnemonic: add
+    SLT:
+      Mnemonic: slt
+    SLTU:
+      Mnemonic: sltu
+    AND:
+      Mnemonic: and
+    OR:
+      Mnemonic: or
+    XOR:
+      Mnemonic: xor
+    SLL:
+      Mnemonic: sll
+    SRL:
+      Mnemonic: srl
+    SUB:
+      Mnemonic: sub
+    SRA:
+      Mnemonic: sra
+  ## 2.5 Control Transfer Instructions
+  JAL:
+    Format: jal $Tgt:Reloc[Metadata]
+    Flag: [Call]
+  RET:
+    Format: ret
+    Flag: [Terminator, Return, NoFallthrough]
+  Branches:
+    Format: "$Mnemonic:Template $Rs1:GPR[Use], $Rs2:GPR[Use], $Tgt:Reloc[Metadata] # $Prob:Prob[Metadata]"
+    Flag: [Terminator, Branch]
+    Instances:
+      BEQ:
+        Mnemonic: beq
+      BNE:
+        Mnemonic: bne
+      BLT:
+        Mnemonic: blt
+      BLE:
+        Mnemonic: ble
+      BGT:
+        Mnemonic: bgt
+      BGE:
+        Mnemonic: bge
+      BLTU:
+        Mnemonic: bltu
+      BLEU:
+        Mnemonic: bleu
+      BGTU:
+        Mnemonic: bgtu
+      BGEU:
+        Mnemonic: bgeu
+  JR:
+    Format: "jr $Tgt:GPR[Use] # $Table:Reloc[Metadata]"
+    Flag: [Terminator, IndirectJump, NoFallthrough]
+  J:
+    Format: j $Tgt:Reloc[Metadata]
+    Flag: [Terminator, Branch, NoFallthrough]
+  UNIMP:
+    Format: unimp
+    Flag: [Terminator, NoFallthrough]
+  ## 2.6 Load and Store Instructions
+  Load:
+    Format: "$Mnemonic:Template $Rd:GPR[Def], $Imm:Imm12[Metadata]($Rs1:BaseLike[Use]) # $Alignment:Align[Metadata]"
+    Flag: [Load]
+  InstanceLoad:
+    Template: Load
+    LB:
+      Mnemonic: lb
+    LH:
+      Mnemonic: lh
+    LW:
+      Mnemonic: lw
+    LBU:
+      Mnemonic: lbu
+    LHU:
+      Mnemonic: lhu
+  Store:
+    Format: "$Mnemonic:Template $Rs2:GPR[Use], $Imm:Imm12[Metadata]($Rs1:BaseLike[Use]) # $Alignment:Align[Metadata]"
+    Flag: [Store]
+  InstanceStore:
+    Template: Store
+    SB:
+      Mnemonic: sb
+    SH:
+      Mnemonic: sh
+    SW:
+      Mnemonic: sw
+  AMOADD_W:
+    Format: amoadd.w.aqrl $Rd:GPR[Def], $Val:GPR[Use], ($Rs1:GPR[Use])
+    Flag: [Load, Store]
+  # RV64I Base Integer Instruction Set
+  ## 5.2 Integer Computational Instructions
+  InstanceRIW:
+    Template: IType
+    ADDIW:
+      Mnemonic: addiw
+  ShiftImmW:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:GPR[Use], $Imm:UImm5[Metadata]
+    Instances:
+      SLLIW:
+        Mnemonic: slliw
+      SRLIW:
+        Mnemonic: srliw
+      SRAIW:
+        Mnemonic: sraiw
+  InstanceRRW:
+    Template: RType
+    ADDW:
+      Mnemonic: addw
+    SUBW:
+      Mnemonic: subw
+    SLLW:
+      Mnemonic: sllw
+    SRLW:
+      Mnemonic: srlw
+    SRAW:
+      Mnemonic: sraw
+  ## 5.3 Load and Store Instructions
+  InstanceLoad64:
+    Template: Load
+    LD:
+      Mnemonic: ld
+    LWU:
+      Mnemonic: lwu
+  InstanceStore64:
+    Template: Store
+    SD:
+      Mnemonic: sd
+  # "M" Standard Extension for Integer Multiplication and Division
+  ## 6.2 Integer Multiplication Instructions
+  InstanceMRR:
+    Template: RType
+    MUL:
+      Mnemonic: mul
+    MULH:
+      Mnemonic: mulh
+    MULHSU:
+      Mnemonic: mulhsu
+    MULHU:
+      Mnemonic: mulhu
+    MULW:
+      Mnemonic: mulw
+    DIV:
+      Mnemonic: div
+    DIVU:
+      Mnemonic: divu
+    REM:
+      Mnemonic: rem
+    REMU:
+      Mnemonic: remu
+    DIVUW:
+      Mnemonic: divuw
+    REMUW:
+      Mnemonic: remuw
+
+  InstSDivRemW:
+    Format: "$Mnemonic:Template $Rd:GPR[Def], $Rs1:GPR[Use], $Rs2:GPR[Use] # $LogDividend:Imm[Metadata], $LogDivisor:Imm[Metadata], $NonNegativeHint:Imm[Metadata]"
+    Instances:
+      DIVW:
+        Mnemonic: divw
+      REMW:
+        Mnemonic: remw
+
+  # "F" Standard Extension for Single-Precision Floating-Point
+  FRType:
+    Format: $Mnemonic:Template $Rd:FPR[Def], $Rs1:FPR[Use], $Rs2:FPR[Use]
+  FFType:
+    Format: $Mnemonic:Template $Rd:FPR[Def], $Rs1:FPR[Use]
+  FIFType:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:FPR[Use]
+  FIFRTZType:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:FPR[Use], rtz
+  FIFFType:
+    Format: $Mnemonic:Template $Rd:GPR[Def], $Rs1:FPR[Use], $Rs2:FPR[Use]
+  FFIType:
+    Format: $Mnemonic:Template $Rd:FPR[Def], $Rs1:GPR[Use]
+
+  ## 11.5 Single-Precision Load and Store Instructions
+  FLW:
+    Format: "flw $Rd:FPR[Def], $Imm:Imm12[Metadata]($Rs1:BaseLike[Use]) # $Alignment:Align[Metadata]"
+    Flag: [Load]
+  FSW:
+    Format: "fsw $Rs2:FPR[Use], $Imm:Imm12[Metadata]($Rs1:BaseLike[Use]) # $Alignment:Align[Metadata]"
+    Flag: [Store]
+  ## 11.6 Single-Precision Floating-Point Computational Instructions
+  ## 11.7 Single-Precision Floating-Point Conversion and Move Instructions
+  ## 11.8 Single-Precision Floating-Point Compare Instructions
+  ## 11.9 Single-Precision Floating-Point Classify Instruction
+  InstanceFRR:
+    Template: FRType
+    FADD_S:
+      Mnemonic: fadd.s
+    FSUB_S:
+      Mnemonic: fsub.s
+    FMUL_S:
+      Mnemonic: fmul.s
+    FDIV_S:
+      Mnemonic: fdiv.s
+    FMIN_S:
+      Mnemonic: fmin.s
+    FMAX_S:
+      Mnemonic: fmax.s
+  InstanceFF:
+    Template: FFType
+    FNEG_S:
+      Mnemonic: fneg.s
+    FABS_S:
+      Mnemonic: fabs.s
+    FSGNJ_S:
+      Mnemonic: fsgnj.s
+    FMV_S:
+      Mnemonic: fmv.s
+      Flag: [RegCopy]
+  InstanceFIFRTZ:
+    Template: FIFRTZType
+    FCVT_W_S:
+      Mnemonic: fcvt.w.s
+    FCVT_WU_S:
+      Mnemonic: fcvt.wu.s
+  InstanceFIF:
+    Template: FIFType
+    FCLASS_S:
+      Mnemonic: fclass.s
+    FMV_X_W:
+      Mnemonic: fmv.x.w
+  InstanceFIFF:
+    Template: FIFFType
+    FEQ_S:
+      Mnemonic: feq.s
+    FLT_S:
+      Mnemonic: flt.s
+    FLE_S:
+      Mnemonic: fle.s
+  InstanceFFI:
+    Template: FFIType
+    FMV_W_X:
+      Mnemonic: fmv.w.x
+    FCVT_S_W:
+      Mnemonic: fcvt.s.w
+    FCVT_S_WU:
+      Mnemonic: fcvt.s.wu
+
+  Fma:
+    Format: $Mnemonic:Template $Rd:FPR[Def], $Rs1:FPR[Use], $Rs2:FPR[Use], $Rs3:FPR[Use]
+    Instances:
+      FMADD_S:
+        Mnemonic: fmadd.s
+      FMSUB_S:
+        Mnemonic: fmsub.s
+      FNMADD_S:
+        Mnemonic: fnmadd.s
+      FNMSUB_S:
+        Mnemonic: fnmsub.s
+  # Bitmanip Extension
+  InstanceBRR:
+    Template: RType
+    # Zba
+    ADD_UW:
+      Mnemonic: add.uw
+    SH1ADD:
+      Mnemonic: sh1add
+    SH1ADD_UW:
+      Mnemonic: sh1add.uw
+    SH2ADD:
+      Mnemonic: sh2add
+    SH2ADD_UW:
+      Mnemonic: sh2add.uw
+    SH3ADD:
+      Mnemonic: sh3add
+    SH3ADD_UW:
+      Mnemonic: sh3add.uw
+    SLLI_UW:
+      Mnemonic: slli.uw
+    # Zbb
+    ANDN:
+      Mnemonic: andn
+    ORN:
+      Mnemonic: orn
+    XNOR:
+      Mnemonic: xnor
+    MIN:
+      Mnemonic: min
+    MINU:
+      Mnemonic: minu
+    MAX:
+      Mnemonic: max
+    MAXU:
+      Mnemonic: maxu
+    ROL:
+      Mnemonic: rol
+    ROLW:
+      Mnemonic: rolw
+    ROR:
+      Mnemonic: ror
+    RORI:
+      Mnemonic: rori
+    RORIW:
+      Mnemonic: roriw
+    RORW:
+      Mnemonic: rorw
+  InstanceBRSExt:
+    Template: R2Type
+    SEXT_B:
+      Mnemonic: sext.b
+    SEXT_H:
+      Mnemonic: sext.h
+    SEXT_W:
+      Mnemonic: sext.w
+    ZEXT_H:
+      Mnemonic: zext.h
+    ZEXT_W:
+      Mnemonic: zext.w
+  InstanceBR:
+    Template: R2Type
+    # Zba
+    CLZ:
+      Mnemonic: clz
+    CLZW:
+      Mnemonic: clzw
+    CTZ:
+      Mnemonic: ctz
+    CTZW:
+      Mnemonic: ctzw
+    CPOP:
+      Mnemonic: cpop
+    CPOPW:
+      Mnemonic: cpopw
+    # Zbb
+    ORC_B:
+      Mnemonic: orc.b
+    REV8:
+      Mnemonic: rev8
+
+  # Pseudo Instructions
+  LoadImm12:
+    Format: "li $Rd:GPR[Def], $Imm:NonZeroImm12[Metadata]" # addiu
+    Flag: [LoadConstant]
+
+  LoadImm32:
+    Format: "li $Rd:GPR[Def], $Imm:NonZeroImm32[Metadata]" # lui + addi
+    Flag: [LegalizePreRA, LoadConstant]
+
+  LoadImm64:
+    Format: "li $Rd:GPR[Def], $Imm:NonZeroImm64[Metadata]"
+    Flag: [LegalizePreRA, LoadConstant]
+
+  LoadImm64Complex:
+    Format: "li $Rd:GPR[Def], $Imm:NonZeroImm64[Metadata]"
+    Flag: [LoadConstant]
+
+  MoveGPR:
+    Format: "mv $Rd:GPR[Def], $Rs1:GPR[Use]"
+    Flag: [RegCopy]
+
+  Select_GPR_GPR:
+    Format: "select_gpr_gpr $Rd:GPR[Def], $Rs1:IRegOrImm[Use], $Rs2:IRegOrImm[Use], $Lhs:GPR[Use], $Rhs:GPR[Use], $CC:CC[Metadata]"
+    Flag: [LegalizePreRA]
+
+  # Rd = cond ? Rs1 op Rs2 : Rs1
+  Select_GPR_Arith:
+    Format: "select_gpr_arith $Rd:GPR[Def], $Rs1:GPR[Use], $Rs2:GPR[Use], $Lhs:GPR[Use], $Rhs:GPR[Use], $CC:CC[Metadata], $Op:Imm[Metadata]"
+    Flag: [LegalizePreRA]
+
+  Select_FPR_GPR:
+    Format: "select_fpr_gpr $Rd:FPR[Def], $Rs1:FPR[Use], $Rs2:FPR[Use], $Lhs:GPR[Use], $Rhs:GPR[Use], $CC:CC[Metadata]"
+    Flag: [LegalizePreRA]
+
+InstSelection:
+  # Constants
+  - Pattern:
+      InstLoadGlobalAddress:
+        Dst: $Dst
+        Addr: $Addr
+    Replace:
+      ADDI:
+        Rd: $Dst
+        Rs1:
+          AUIPC:
+            Rd: getVRegAs(ctx, $Dst)
+            Imm: getHighBits($Addr)
+        Imm: getLowBits($Addr)
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: isZero($Imm)
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      # TODO: using ResetToZero -> InstFlagLoadConstant
+      MoveGPR:
+        Rd: $Dst
+        Rs1: getZero($Dst)
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: isOperandNonZeroImm12($Imm)
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      LoadImm12:
+        Rd: $Dst
+        Imm: $Imm
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: selectOperandNonZeroHigh20Bits($Imm, [$UImm])
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      LUI:
+        Rd: $Dst
+        Imm: $UImm
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: isOperandNonZeroImm32($Imm)
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      LoadImm32:
+        Rd: $Dst
+        Imm: $Imm
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Imm: $Imm
+        $Predicate: isOperandNonZeroImm64($Imm)
+      $Instances: [InstLoadImmToReg, InstLoadImm]
+    Replace:
+      LoadImm64:
+        Rd: $Dst
+        Imm: $Imm
+
+  # Fuse address generation
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs:
+          InstShl:
+            Lhs: $Lhs
+            Rhs: $Imm
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs) && ($Imm).isImm() && ($Imm).imm() == 1
+    Replace:
+      SH1ADD:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstShl:
+            Lhs: $Rhs
+            Rhs: $Imm
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs) && ($Imm).isImm() && ($Imm).imm() == 1
+    Replace:
+      SH1ADD:
+        Rd: $Dst
+        Rs1: $Rhs
+        Rs2: $Lhs
+
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs:
+          InstShl:
+            Lhs: $Lhs
+            Rhs: $Imm
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs) && ($Imm).isImm() && ($Imm).imm() == 2
+    Replace:
+      SH2ADD:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstShl:
+            Lhs: $Rhs
+            Rhs: $Imm
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs) && ($Imm).isImm() && ($Imm).imm() == 2
+    Replace:
+      SH2ADD:
+        Rd: $Dst
+        Rs1: $Rhs
+        Rs2: $Lhs
+
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs:
+          InstShl:
+            Lhs: $Lhs
+            Rhs: $Imm
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs) && ($Imm).isImm() && ($Imm).imm() == 3
+    Replace:
+      SH3ADD:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstShl:
+            Lhs: $Rhs
+            Rhs: $Imm
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs) && ($Imm).isImm() && ($Imm).imm() == 3
+    Replace:
+      SH3ADD:
+        Rd: $Dst
+        Rs1: $Rhs
+        Rs2: $Lhs
+
+  # Integer Instructions
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandImm12($Rhs)
+    Replace:
+      ADDI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      ADD:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandImm12($Rhs)
+    Replace:
+      ADDIW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstAdd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      ADDW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstAnd:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstXor:
+            Lhs: $Rhs
+            Rhs: $Imm
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isNotImm(($Dst).type(), $Imm)
+    Replace:
+      ANDN:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstOr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstXor:
+            Lhs: $Rhs
+            Rhs: $Imm
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isNegativeOne($Imm)
+    Replace:
+      ORN:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstXor:
+        Dst: $Dst
+        Lhs:
+          InstXor:
+            Lhs: $Lhs
+            Rhs: $Rhs
+        Rhs: $Imm
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isNotImm(($Dst).type(), $Imm)
+    Replace:
+      XNOR:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+  - Pattern:
+      InstXor:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstXor:
+            Lhs: $Rhs
+            Rhs: $Imm
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isNotImm(($Dst).type(), $Imm)
+    Replace:
+      XNOR:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandImm12($Rhs)
+      $Instances: [InstAnd, InstOr, InstXor]
+    Replace:
+      IntegerBinaryImm:
+        $Opcode: getIntegerBinaryImmOpcode(rootOpcode)
+        $Template: ANDI
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+      $Instances: [InstAnd, InstOr, InstXor]
+    Replace:
+      IntegerBinaryReg:
+        $Opcode: getIntegerBinaryRegOpcode(rootOpcode)
+        $Template: AND
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstAbs:
+            Src: $Val
+        $Predicate: isOperandIReg($Val) && isZero($Lhs) && isOperandI32($Dst)
+    Replace:
+      MIN:
+        Rd: $Dst
+        Rs1:
+          SUBW:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: getZero($Dst)
+            Rs2: $Val
+        Rs2: $Val
+
+  - Pattern:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SUB:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstSub:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SUBW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstShl:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandUImm6($Rhs)
+    Replace:
+      SLLI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstShl:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandUImm6($Rhs)
+    Replace:
+      SLLIW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstAShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandUImm6($Rhs)
+    Replace:
+      SRAI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstAShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandUImm6($Rhs)
+    Replace:
+      SRAIW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstLShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandUImm6($Rhs)
+    Replace:
+      SRLI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstLShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandUImm6($Rhs)
+    Replace:
+      SRLIW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstShl:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SLL:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstShl:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SLLW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstAShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SRA:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstAShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SRAW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstLShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SRL:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstLShr:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      SRLW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstSMin:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      MIN:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstSMax:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      MAX:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstMul:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      MUL:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstMul:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      MULW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  # - Pattern:
+  #     InstSDiv:
+  #       Dst: $Dst
+  #       Lhs: $Lhs
+  #       Rhs: $Rhs
+  #       $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandI32($Rhs) && ($Rhs).isImm() && ($Rhs).imm() == 2
+  #   Replace:
+  #     SRAIW:
+  #       Rd: $Dst
+  #       Rs1:
+  #         ADD:
+  #           Rd: getVReg64As(ctx, $Dst)
+  #           Rs1: $Lhs
+  #           Rs2:
+  #             SRLIW:
+  #               Rd: getVRegAs(ctx, $Dst)
+  #               Rs1: $Lhs
+  #               Imm: MIROperand::asImm(31, OperandType::Int32)
+  #       Imm: MIROperand::asImm(1, OperandType::Int32)
+
+  # - Pattern:
+  #     InstSDiv:
+  #       Dst: $Dst
+  #       Lhs: $Lhs
+  #       Rhs: $Rhs
+  #       $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && selectSDiv32ByPowerOf2($Rhs, [$Shift])
+  #   Replace:
+  #     SRAIW:
+  #       Rd: $Dst
+  #       Rs1:
+  #         ADD:
+  #           Rd: getVReg64As(ctx, $Dst)
+  #           Rs1: $Lhs
+  #           Rs2:
+  #             SRLI:
+  #               Rd: getVReg64As(ctx, $Dst)
+  #               Rs1:
+  #                 SLLI:
+  #                   Rd: getVReg64As(ctx, $Dst)
+  #                   Rs1: $Lhs
+  #                   Imm: MIROperand::asImm(1, OperandType::Int32)
+  #               Imm: MIROperand::asImm(64 - ($Shift).imm(), OperandType::Int32)
+  #       Imm: $Shift
+
+  # Signed Division with power-of-2 using SFB
+  # https://alive2.llvm.org/ce/z/CMZLjd
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandI32($Rhs) && selectSDiv32ByPowerOf2($Rhs, [$Shift]) && selectAddImm32(ctx, ($Rhs).imm() - 1, [$AddRhs], [$Op])
+    Replace:
+      SRAIW:
+        Rd: $Dst
+        Rs1:
+          Select_GPR_Arith:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: $Lhs
+            Rs2: $AddRhs
+            Lhs: $Lhs
+            Rhs: getZero($Dst)
+            CC: MIROperand::asImm(CompareOp::ICmpSignedLessThan, OperandType::Int32)
+            Op: $Op
+        Imm: $Shift
+
+  # - Pattern:
+  #     InstSDiv:
+  #       Dst: $Dst
+  #       Lhs: $Lhs
+  #       Rhs:
+  #         InstShl:
+  #           Lhs: $One
+  #           Rhs: $Shift
+  #       $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOne($One)
+  #   Replace:
+  #     SRAW:
+  #       Rd: $Dst
+  #       Rs1:
+  #         ADD:
+  #           Rd: getVReg64As(ctx, $Dst)
+  #           Rs1: $Lhs
+  #           Rs2:
+  #             SRL:
+  #               Rd: getVReg64As(ctx, $Dst)
+  #               Rs1:
+  #                 SLLI:
+  #                   Rd: getVReg64As(ctx, $Dst)
+  #                   Rs1: $Lhs
+  #                   Imm: MIROperand::asImm(1, OperandType::Int32)
+  #               Rs2:
+  #                 InstSub:
+  #                   Dst: getVRegAs(ctx, $Dst)
+  #                   Lhs: MIROperand::asImm(64, OperandType::Int32)
+  #                   Rhs: $Shift
+  #       Rs2: $Shift
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstShl:
+            Dst: $ShlRes
+            Lhs: $One
+            Rhs: $Shift
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOne($One)
+    Replace:
+      SRAW:
+        Rd: $Dst
+        Rs1:
+          Select_GPR_Arith:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: $Lhs
+            Rs2:
+              ADDIW:
+                Rd: getVRegAs(ctx, $Dst)
+                Rs1: $ShlRes
+                Imm: MIROperand::asImm(-1, OperandType::Int32)
+            Lhs: $Lhs
+            Rhs: getZero($Dst)
+            CC: MIROperand::asImm(CompareOp::ICmpSignedLessThan, OperandType::Int32)
+            Op: MIROperand::asImm(ADDW, OperandType::Special)
+        Rs2: $Shift
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && selectSDiv32ByConstant($Rhs, [$Magic], [$Shift], [$Factor]) && isSDivExpandProfitable($LogDividend, $LogDivisor, $NonNegativeHint, $Factor, false) && buildMul64Imm(ctx, $Lhs, $Magic, $Factor, [$Out]) && buildSRAIW(ctx, $Out, $Shift, [$SRAOut])
+    Replace:
+      ADD:
+        Rd: $Dst
+        Rs1:
+          SRLIW:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: $Out
+            Imm: MIROperand::asImm(31, OperandType::Int32)
+        Rs2: $SRAOut
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && !isOperandIReg($Rhs)
+    Replace:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstLoadImm:
+            Dst: getVRegAs(ctx, $Dst)
+            Imm: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+
+  - Pattern:
+      SRLIW:
+        Rd: $Dst
+        Rs1:
+          SRLI:
+            Rd: $Intermediate
+            Rs1: $Lhs
+            Imm: $Shift1
+            $Predicate: ($Shift1).imm() == 32 && ctx.isSafeToUse($Lhs, $Intermediate)
+        Imm: $Shift2
+    Replace:
+      SRLI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: MIROperand::asImm(($Shift2).imm() + 32, OperandType::Int32)
+
+  - Pattern:
+      SRAIW:
+        Rd: $Dst
+        Rs1:
+          SRLI:
+            Rd: $Intermediate
+            Rs1: $Lhs
+            Imm: $Shift1
+            $Predicate: ($Shift1).imm() == 32 && ctx.isSafeToUse($Lhs, $Intermediate)
+        Imm: $Shift2
+    Replace:
+      SRAI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: MIROperand::asImm(($Shift2).imm() + 32, OperandType::Int32)
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      DIVW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+
+  - Pattern:
+      InstSDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      DIV:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandImm($Rhs) && selectSDiv32ByConstant($Rhs, [$Magic], [$Shift], [$Factor]) && isSDivExpandProfitable($LogDividend, $LogDivisor, $NonNegativeHint, $Factor, true)
+    Replace:
+      SUBW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2:
+          InstMul:
+            Dst: getVRegAs(ctx, $Dst)
+            Lhs:
+              InstSDiv:
+                Dst: getVRegAs(ctx, $Dst)
+                Lhs: $Lhs
+                Rhs: $Rhs
+                LogDividend: $LogDividend
+                LogDivisor: $LogDivisor
+                NonNegativeHint: getSDivHint($NonNegativeHint)
+            Rhs: $Rhs
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && !isOperandIReg($Rhs)
+    Replace:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs:
+          InstLoadImm:
+            Dst: getVRegAs(ctx, $Dst)
+            Imm: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      REMW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+        LogDividend: $LogDividend
+        LogDivisor: $LogDivisor
+        NonNegativeHint: $NonNegativeHint
+
+  - Pattern:
+      InstSRem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      REM:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstUDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      DIVUW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstURem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI32($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      REMUW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstUDiv:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      DIVU:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstURem:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        $Predicate: isOperandI64($Dst) && isOperandIReg($Lhs) && isOperandIReg($Rhs)
+    Replace:
+      REMU:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      $Template:
+        Rd: $Dst
+        Rs1:
+          SRAIW:
+            Rd: $Intermediate
+            Rs1: $Lhs
+            Imm: $Shift1
+        Imm: $Shift2
+        $Predicate: ($Shift1) == ($Shift2) && selectShiftImm12Mask($Shift1, [$Mask])
+      $Instances: [SLLI, SLLIW]
+    Replace:
+      ANDI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Mask
+
+  # Integer Compare
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedLessThan)
+    Replace:
+      SLT:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isCompareOp($Op, CompareOp::ICmpUnsignedLessThan)
+    Replace:
+      SLTU:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedGreaterThan)
+    Replace:
+      SLT:
+        Rd: $Dst
+        Rs1: $Rhs
+        Rs2: $Lhs
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isCompareOp($Op, CompareOp::ICmpUnsignedGreaterThan)
+    Replace:
+      SLTU:
+        Rd: $Dst
+        Rs1: $Rhs
+        Rs2: $Lhs
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandImm12($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedLessThan)
+    Replace:
+      SLTI:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandImm12($Rhs) && isCompareOp($Op, CompareOp::ICmpUnsignedLessThan)
+    Replace:
+      SLTIU:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: $Rhs
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isZero($Rhs) && isCompareOp($Op, CompareOp::ICmpEqual)
+    Replace:
+      SLTIU:
+        Rd: $Dst
+        Rs1: $Lhs
+        Imm: getOne($Lhs)
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isZero($Rhs) && isCompareOp($Op, CompareOp::ICmpNotEqual)
+    Replace:
+      SLTU:
+        Rd: $Dst
+        Rs1: getZero($Rhs)
+        Rs2: $Lhs
+
+  # x<=y -> !(y<x)
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedLessEqual)
+    Replace:
+      XORI:
+        Rd: $Dst
+        Rs1:
+          SLT:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: $Rhs
+            Rs2: $Lhs
+        Imm: getOne($Dst)
+
+  - Pattern:
+      InstICmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && isCompareOp($Op, CompareOp::ICmpUnsignedLessEqual)
+    Replace:
+      XORI:
+        Rd: $Dst
+        Rs1:
+          SLTU:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: $Rhs
+            Rs2: $Lhs
+        Imm: getOne($Dst)
+
+  # SExt/ZExt/Trunc
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandBoolReg($Src)
+    Replace:
+      InstCopy:
+        Dst: $Dst
+        Src: $Src
+
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src) && ($Src).type() == OperandType::Int8
+    Replace:
+      ANDI:
+        Rd: $Dst
+        Rs1: $Src
+        Imm: getZExtMask(($Dst).type(), ($Src).type())
+
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src) && ($Src).type() == OperandType::Int32
+    Replace:
+      ZEXT_W:
+        Rd: $Dst
+        Rs1: $Src
+
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src) && ($Src).type() == OperandType::Int16
+    Replace:
+      ZEXT_H:
+        Rd: $Dst
+        Rs1: $Src
+
+  - Pattern:
+      InstSExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src)
+    Replace:
+      InstCopy:
+        Dst: $Dst
+        Src: $Src
+
+  # Control Flow
+  # See also https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md
+  - Pattern:
+      InstUnreachable:
+    Replace:
+      UNIMP:
+  - Pattern:
+      InstJump:
+        Tgt: $Tgt
+    Replace:
+      J:
+        Tgt: $Tgt
+
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && isZero($Rhs) && ctx.isSafeToUse($Lhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      Branch:
+        $Opcode: getICmpBranchOpcode($Op)
+        $Template: BLT
+        Rs1: $Lhs
+        Rs2: getZero($Lhs)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  # a >= 1 -> a > 0
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && isOne($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedGreaterEqual) && ctx.isSafeToUse($Lhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      BGT:
+        Rs1: $Lhs
+        Rs2: getZero($Lhs)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  # a > -1 -> a >= 0
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && isNegativeOne($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedGreaterThan) && ctx.isSafeToUse($Lhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      BGE:
+        Rs1: $Lhs
+        Rs2: getZero($Lhs)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  # a < 1 -> a <= 0
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && isOne($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedLessThan) && ctx.isSafeToUse($Lhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      BLE:
+        Rs1: $Lhs
+        Rs2: getZero($Lhs)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  # a <= -1 -> a < 0
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && isNegativeOne($Rhs) && isCompareOp($Op, CompareOp::ICmpSignedLessEqual) && ctx.isSafeToUse($Lhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      BLT:
+        Rs1: $Lhs
+        Rs2: getZero($Lhs)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && isOperandImm($Rhs) && ctx.isSafeToUse($Lhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      Branch:
+        $Opcode: getICmpBranchOpcode($Op)
+        $Template: BLT
+        Rs1: $Lhs
+        Rs2:
+          InstLoadImm:
+            Dst: getVRegAs(ctx, $Lhs)
+            Imm: $Rhs
+        Tgt: $Reloc
+        Prob: $Prob
+
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstICmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isOperandIReg($Lhs) && isOperandIReg($Rhs) && ctx.isSafeToUse($Lhs, $Dst) && ctx.isSafeToUse($Rhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      Branch:
+        $Opcode: getICmpBranchOpcode($Op)
+        $Template: BLT
+        Rs1: $Lhs
+        Rs2: $Rhs
+        Tgt: $Reloc
+        Prob: $Prob
+
+  # a unordered fcmp b -> (a ordered fcmp b) == 0
+  - Pattern:
+      InstBranch:
+        Cond:
+          InstFCmp:
+            Dst: $Dst
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: $Op
+            $Predicate: isFCmpUnorderedOp($Op) && ctx.isSafeToUse($Lhs, $Dst) && ctx.isSafeToUse($Rhs, $Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+    Replace:
+      BEQ:
+        Rs1:
+          InstFCmp:
+            Dst: getVRegAs(ctx, $Dst)
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: getFCmpOrderedOp($Op)
+        Rs2: getZero($Dst)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  - Pattern:
+      InstBranch:
+        Cond: $Cond
+        Tgt: $Reloc
+        Prob: $Prob
+        $Predicate: isOperandIReg($Cond)
+    Replace:
+      BNE:
+        Rs1: $Cond
+        Rs2: getZero($Cond)
+        Tgt: $Reloc
+        Prob: $Prob
+
+  # Load/Store
+  - Pattern:
+      InstLoad:
+        Dst: $Dst
+        Addr: $Addr
+        Alignment: $Alignment
+        $Predicate: selectAddrOffset($Addr, ctx, [$Base], [$Offset])
+    Replace:
+      Load:
+        $Opcode: getLoadOpcode($Dst)
+        $Template: LW
+        Rd: $Dst
+        Rs1: $Base
+        Imm: $Offset
+        Alignment: $Alignment
+
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src:
+          InstLoad:
+            Dst: $Val
+            Addr: $Addr
+            Alignment: $Alignment
+            $Predicate: ctx.isSafeToUse($Addr, $Val) && selectAddrOffset($Addr, ctx, [$Base], [$Offset])
+    Replace:
+      Load:
+        $Opcode: getZExtLoadOpcode($Val)
+        $Template: LBU
+        Rd: $Dst
+        Rs1: $Base
+        Imm: $Offset
+        Alignment: $Alignment
+
+  - Pattern:
+      InstStore:
+        Src:
+          InstTrunc:
+            Dst: $Dst
+            Src: $Src
+            $Predicate: ctx.isSafeToUse($Src, $Dst)
+        Addr: $Addr
+        Alignment: $Alignment
+        $Predicate: isOperandVRegOrISAReg($Src) && selectAddrOffset($Addr, ctx, [$Base], [$Offset])
+    Replace:
+      Store:
+        $Opcode: getStoreOpcode($Dst)
+        $Template: SW
+        Rs2: $Src
+        Rs1: $Base
+        Imm: $Offset
+        Alignment: $Alignment
+
+  - Pattern:
+      InstStore:
+        Src: $Src
+        Addr: $Addr
+        Alignment: $Alignment
+        $Predicate: isOperandVRegOrISAReg($Src) && selectAddrOffset($Addr, ctx, [$Base], [$Offset])
+    Replace:
+      Store:
+        $Opcode: getStoreOpcode($Src)
+        $Template: SW
+        Rs2: $Src
+        Rs1: $Base
+        Imm: $Offset
+        Alignment: $Alignment
+
+  # Floating Point
+  - Pattern:
+      InstF2S:
+        Dst: $Dst
+        Src: $Src
+    Replace:
+      FCVT_W_S:
+        Rd: $Dst
+        Rs1: $Src
+
+  - Pattern:
+      InstS2F:
+        Dst: $Dst
+        Src: $Src
+    Replace:
+      FCVT_S_W:
+        Rd: $Dst
+        Rs1: $Src
+
+  - Pattern:
+      InstFAdd:
+        Dst: $Dst
+        Lhs:
+          InstFMul:
+            Dst: $MulDst
+            Lhs: $X
+            Rhs: $Y
+        Rhs: $Z
+        $Predicate: isAggressiveOptEnabled() && ctx.hasOneUse($MulDst)
+    Replace:
+      FMADD_S:
+        Rd: $Dst
+        Rs1: $X
+        Rs2: $Y
+        Rs3: $Z
+
+  - Pattern:
+      InstFSub:
+        Dst: $Dst
+        Lhs:
+          InstFMul:
+            Dst: $MulDst
+            Lhs: $X
+            Rhs: $Y
+        Rhs: $Z
+        $Predicate: isAggressiveOptEnabled() && ctx.hasOneUse($MulDst)
+    Replace:
+      FMSUB_S:
+        Rd: $Dst
+        Rs1: $X
+        Rs2: $Y
+        Rs3: $Z
+
+  - Pattern:
+      InstFAdd:
+        Dst: $Dst
+        Lhs:
+          InstFNeg:
+            Dst: $NegDst
+            Src:
+              InstFMul:
+                Dst: $MulDst
+                Lhs: $X
+                Rhs: $Y
+        Rhs: $Z
+        $Predicate: isAggressiveOptEnabled() && ctx.hasOneUse($MulDst) && ctx.hasOneUse($NegDst)
+    Replace:
+      FNMSUB_S:
+        Rd: $Dst
+        Rs1: $X
+        Rs2: $Y
+        Rs3: $Z
+
+  - Pattern:
+      InstFSub:
+        Dst: $Dst
+        Lhs:
+          InstFNeg:
+            Dst: $NegDst
+            Src:
+              InstFMul:
+                Dst: $MulDst
+                Lhs: $X
+                Rhs: $Y
+        Rhs: $Z
+        $Predicate: isAggressiveOptEnabled() && ctx.hasOneUse($MulDst) && ctx.hasOneUse($NegDst)
+    Replace:
+      FNMADD_S:
+        Rd: $Dst
+        Rs1: $X
+        Rs2: $Y
+        Rs3: $Z
+
+  - Pattern:
+      $Template:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+      $Instances: [InstFAdd, InstFSub, InstFMul, InstFDiv]
+    Replace:
+      FloatingPointBinary:
+        $Opcode: getFloatingPointBinaryOpcode(rootOpcode)
+        $Template: FADD_S
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2: $Rhs
+
+  - Pattern:
+      InstFNeg:
+        Dst: $Dst
+        Src: $Src
+    Replace:
+      FNEG_S:
+        Rd: $Dst
+        Rs1: $Src
+
+  - Pattern:
+      InstFCmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: selectFCmpOpcode($Op, $Lhs, $Rhs, [$OutLhs], [$OutRhs], [$CmpOpcode])
+    Replace:
+      FCmp:
+        $Opcode: static_cast<uint32_t>(($CmpOpcode).imm())
+        $Template: FLT_S
+        Rd: $Dst
+        Rs1: $OutLhs
+        Rs2: $OutRhs
+
+  - Pattern:
+      InstFCmp:
+        Dst: $Dst
+        Lhs: $Lhs
+        Rhs: $Rhs
+        Op: $Op
+        $Predicate: isFCmpUnorderedOp($Op)
+    Replace:
+      XORI:
+        Rd: $Dst
+        Rs1:
+          InstFCmp:
+            Dst: getVRegAs(ctx, $Dst)
+            Lhs: $Lhs
+            Rhs: $Rhs
+            Op: getFCmpOrderedOp($Op)
+        Imm: getOne($Dst)
+
+  - Pattern:
+      InstAbs:
+        Dst: $Dst
+        Src: $Val
+        $Predicate: isOperandIReg($Val) && isOperandI32($Dst)
+    Replace:
+      MAX:
+        Rd: $Dst
+        Rs1:
+          SUBW:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: getZero($Dst)
+            Rs2: $Val
+        Rs2: $Val
+
+  # a - (b - c) -> a + c - b
+  - Pattern:
+      SUBW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2:
+          SUBW:
+            Rd: $Rhs
+            Rs1: $SubLhs
+            Rs2: $SubRhs
+        $Predicate: ctx.hasOneUse($Rhs)
+    Replace:
+      SUBW:
+        Rd: $Dst
+        Rs1:
+          ADDW:
+            Rd: getVRegAs(ctx, $Dst)
+            Rs1: $Lhs
+            Rs2: $SubRhs
+        Rs2: $SubLhs
+
+  - Pattern:
+      SUBW:
+        Rd: $Dst
+        Rs1: $Lhs
+        Rs2:
+          SUBW:
+            Rs1: $SubLhs
+            Rs2: $SubRhs
+        $Predicate: isZero($Lhs)
+    Replace:
+      SUBW:
+        Rd: $Dst
+        Rs1: $SubRhs
+        Rs2: $SubLhs
+
+  # For csmith
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src:
+          ANDI:
+            Rd: $Val
+            Rs1: $Src
+            Imm: $Imm
+        $Predicate: ($Val).type() == OperandType::Int32 && ($Dst).type() == OperandType::Int64
+    Replace:
+      InstCopy:
+        Dst: $Dst
+        Src: $Val
+
+  - Pattern:
+      InstZExt:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src) && (($Dst).type() == OperandType::Int32 || ($Dst).type() == OperandType::Int64)
+    Replace:
+      AND:
+        Rd: $Dst
+        Rs1: $Src
+        Rs2:
+          LoadImm32:
+            Rd: getVRegAs(ctx, $Src)
+            Imm: getZExtMask(($Dst).type(), ($Src).type())
+
+  - Pattern:
+      InstTrunc:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src) && (($Dst).type() == OperandType::Int32 && ($Src).type() == OperandType::Int32)
+    Replace:
+      InstCopy:
+        Dst: $Dst
+        Src: $Src
+
+  - Pattern:
+      InstTrunc:
+        Dst: $Dst
+        Src: $Src
+        $Predicate: isOperandIReg($Src)
+    Replace:
+      SEXT:
+        $Opcode: selectSExtOpcode(($Dst).type())
+        $Template: SEXT_W
+        Rd: $Dst
+        Rs1: $Src
+
+  - Pattern:
+      Select_GPR_GPR:
+        Rd: $Dst
+        Rs1: $TrueV
+        Rs2: $FalseV
+        Lhs: $Lhs
+        Rhs: $Rhs
+        CC: $CmpOpcode
+        $Predicate: isOperandIReg($Dst) && isOperandIReg($TrueV) && isOperandIReg($FalseV) && selectSFBArith(ctx, $TrueV, $FalseV, [$Rs1], [$Rs2], [$Op])
+    Replace:
+      Select_GPR_Arith:
+        Rd: $Dst
+        Rs1: $Rs1
+        Rs2: $Rs2
+        Lhs: $Lhs
+        Rhs: $Rhs
+        CC: $CmpOpcode
+        Op: $Op
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond: $Cond
+        Lhs: $TrueV
+        Rhs: $FalseV
+        $Predicate: isOperandIReg($Dst) && isOperandIRegOrImm($TrueV) && isOperandIRegOrImm($FalseV) && selectCompare(ctx, $Cond, [$Lhs], [$Rhs], [$CmpOpcode])
+    Replace:
+      Select_GPR_GPR:
+        Rd: $Dst
+        Rs1: $TrueV
+        Rs2: $FalseV
+        Lhs: $Lhs
+        Rhs: $Rhs
+        CC: $CmpOpcode
+
+  - Pattern:
+      InstSelect:
+        Dst: $Dst
+        Cond: $Cond
+        Lhs: $TrueV
+        Rhs: $FalseV
+        $Predicate: isOperandFPR($Dst) && isOperandFPR($TrueV) && isOperandFPR($FalseV) && selectCompare(ctx, $Cond, [$Lhs], [$Rhs], [$CmpOpcode])
+    Replace:
+      Select_FPR_GPR:
+        Rd: $Dst
+        Rs1: $TrueV
+        Rs2: $FalseV
+        Lhs: $Lhs
+        Rhs: $Rhs
+        CC: $CmpOpcode
+
+  - Pattern:
+      Select_GPR_GPR:
+        Rd: $Dst
+        Rs1: $TrueV
+        Rs2: $FalseV
+        Lhs:
+          XORI:
+            Rd: $Cond
+            Rs1: $InvCond
+            Imm: $Imm
+        Rhs: $Rhs
+        CC: $CmpOpcode
+        $Predicate: ctx.hasOneUse($Cond) && isOperandIReg($InvCond) && isOne($Imm) && isZero($Rhs) && isCompareOp($CmpOpcode, CompareOp::ICmpNotEqual)
+    Replace:
+      Select_GPR_GPR:
+        Rd: $Dst
+        Rs1: $FalseV
+        Rs2: $TrueV
+        Lhs: $InvCond
+        Rhs: $Rhs
+        CC: $CmpOpcode
+
+  - Pattern:
+      Select_FPR_GPR:
+        Rd: $Dst
+        Rs1: $TrueV
+        Rs2: $FalseV
+        Lhs:
+          XORI:
+            Rd: $Cond
+            Rs1: $InvCond
+            Imm: $Imm
+        Rhs: $Rhs
+        CC: $CmpOpcode
+        $Predicate: ctx.hasOneUse($Cond) && isOperandIReg($InvCond) && isOne($Imm) && isZero($Rhs) && isCompareOp($CmpOpcode, CompareOp::ICmpNotEqual)
+    Replace:
+      Select_FPR_GPR:
+        Rd: $Dst
+        Rs1: $FalseV
+        Rs2: $TrueV
+        Lhs: $InvCond
+        Rhs: $Rhs
+        CC: $CmpOpcode
+
+  - Pattern:
+      InstFAbs:
+        Dst: $Dst
+        Src: $Src
+    Replace:
+      FABS_S:
+        Rd: $Dst
+        Rs1: $Src
+
+  - Pattern:
+      SLLI:
+        Rd: $Dst
+        Rs1:
+          LoadImm12:
+            Rd: $Val
+            Imm: $Imm
+        Imm: $Shift
+    Replace:
+      LoadImm64:
+        Rd: $Dst
+        Imm: getShiftedImm64($Imm, $Shift)
+
+  - Pattern:
+      SLLI:
+        Rd: $Dst
+        Rs1:
+          LoadImm32:
+            Rd: $Val
+            Imm: $Imm
+            $Predicate: ctx.hasOneUse($Val)
+        Imm: $Shift
+    Replace:
+      LoadImm64:
+        Rd: $Dst
+        Imm: getShiftedImm64($Imm, $Shift)
+
+  - Pattern:
+      ORI:
+        Rd: $Dst
+        Rs1:
+          LoadImm64:
+            Rd: $Val
+            Imm: $Imm1
+            $Predicate: ctx.hasOneUse($Val)
+        Imm: $Imm2
+    Replace:
+      LoadImm64:
+        Rd: $Dst
+        Imm: MIROperand::asImm(($Imm1).imm() | ($Imm2).imm(), OperandType::Int64)
+
+  - Pattern:
+      ADD_UW:
+        Rd: $Dst
+        Rs1:
+          LoadImm12:
+            Imm: $Imm
+            $Predicate: ($Imm).imm() > 0
+        Rs2:
+          SLLI:
+            Rd: $Base
+            Imm: $Shift
+            $Predicate: ($Shift).imm() == 32
+    Replace:
+      ORI:
+        Rd: $Dst
+        Rs1: $Base
+        Imm: $Imm
+
+ScheduleModel:
+  sifive-u74:
+    CustomPeepholeOpt: true
+    Classes:
+      IntegerArithmetic:
+        [
+          ADDI,
+          SLTI,
+          SLTIU,
+          ANDI,
+          ORI,
+          XORI,
+          SLLI,
+          SRLI,
+          SRAI,
+          LUI,
+          AUIPC,
+          ADD,
+          SLT,
+          SLTU,
+          AND,
+          OR,
+          XOR,
+          SLL,
+          SRL,
+          SUB,
+          SRA,
+          ADDIW,
+          SLLIW,
+          SRLIW,
+          SRAIW,
+          ADDW,
+          SUBW,
+          SLLW,
+          SRLW,
+          SRAW,
+          ADD_UW,
+          SLLI_UW,
+          ANDN,
+          ORN,
+          XNOR,
+          MIN,
+          MINU,
+          MAX,
+          MAXU,
+          SEXT_B,
+          SEXT_H,
+          SEXT_W,
+          ZEXT_H,
+          ZEXT_W,
+          LoadImm12,
+          MoveGPR,
+          InstLoadStackObjectAddr,
+          InstCopy,
+          InstCopyFromReg,
+          InstCopyToReg,
+        ]
+      SlowLoadImm: [InstLoadImm, LoadImm32, LoadImm64, LoadImm64Complex]
+      IntegerArithmeticLateB:
+        [ROL, ROLW, ROR, RORI, RORIW, RORW, CLZ, CLZW, CTZ, CTZW, ORC_B]
+      IntegerArithmeticEarlyB: [CPOP, CPOPW]
+      IntegerArithmeticLateAB: [REV8]
+      IntegerArithmeticEarlyLateB:
+        [SH1ADD, SH1ADD_UW, SH2ADD, SH2ADD_UW, SH3ADD, SH3ADD_UW]
+      Branch:
+        [
+          JAL,
+          RET,
+          BEQ,
+          BNE,
+          BLT,
+          BLE,
+          BGT,
+          BGE,
+          BLTU,
+          BLEU,
+          BGTU,
+          BGEU,
+          J,
+          JR,
+          UNIMP,
+        ]
+      LoadStore:
+        [
+          LB,
+          LH,
+          LW,
+          LBU,
+          LHU,
+          SB,
+          SH,
+          SW,
+          LD,
+          LWU,
+          SD,
+          InstStoreRegToStack,
+          AMOADD_W,
+        ]
+      Multi: [MUL, MULH, MULHSU, MULHU, MULW]
+      DivRem: [DIV, DIVU, REM, REMU, DIVUW, REMUW]
+      SDivRemW: [DIVW, REMW]
+      FPCycle1: [FMV_X_W]
+      FPCycle2:
+        [
+          FNEG_S,
+          FCVT_S_W,
+          FCVT_S_WU,
+          FMV_S,
+          FMV_W_X,
+          FMIN_S,
+          FMAX_S,
+          FSGNJ_S,
+          FABS_S,
+        ]
+      FPCycle4: [FEQ_S, FLT_S, FLE_S, FCVT_W_S, FCVT_WU_S]
+      FPCycle5: [FADD_S, FSUB_S, FMUL_S, FMADD_S, FMSUB_S, FNMADD_S, FNMSUB_S]
+      FPDiv: [FDIV_S]
+      FPLoadStore: [FLW, FSW]
+      GeneralLoad: [InstLoadRegFromStack]

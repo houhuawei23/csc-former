@@ -1,0 +1,60 @@
+/*
+    SPDX-License-Identifier: Apache-2.0
+    Copyright 2023 CMMC Authors
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+// Automatically generated file, do not edit!
+
+#include <{{target}}/ScheduleModelDecl.hpp>
+#include "../../../cmmc/Support/Options.hpp"
+#include "../../../cmmc/Support/Diagnostics.hpp"
+#include <iostream>
+
+CMMC_MIR_NAMESPACE_BEGIN
+extern StringOpt targetMachine;
+CMMC_MIR_NAMESPACE_END
+
+CMMC_TARGET_NAMESPACE_BEGIN
+
+{% for model in models %}
+class {{target}}ScheduleModel_{{model.class_name}} final: public TargetScheduleModel {
+    {% for class in model.classes %} {{target}}ScheduleClass{{class}} mScheduleClass_{{class}};{% endfor %}
+public:
+    const ScheduleClass& getInstScheClass(uint32_t opcode) const override {
+        switch(opcode) {
+            {% for class in model.classes %}{% for op in model.classes[class] %}case {{op}}:{% endfor %} return mScheduleClass_{{class}};{% endfor %}
+            default:
+                std::cerr << "getInstScheClass() failed: unknown op: " << opcode << std::endl;
+                reportNotImplemented(CMMC_LOCATION());
+        }
+    }
+    const MicroarchitectureInfo& getInfo() const override;
+    {% if model.peephole %} bool peepholeOpt(MIRFunction& func, CodeGenContext& ctx) const override; {% endif %}
+    bool isExpensiveInst(const MIRInst& inst, const CodeGenContext& ctx) const override;
+};
+{% endfor %}
+
+const TargetScheduleModel& get{{target}}ScheduleModel() {
+    auto machine = targetMachine.get();
+    if(machine == "native") {
+        machine = "{{models[0].name}}";
+    }
+    {% for model in models %}
+    static {{target}}ScheduleModel_{{model.class_name}} model_{{model.class_name}};
+    if(machine == "{{model.name}}") {
+        return model_{{model.class_name}};
+    }
+    {% endfor %}
+    
+    DiagnosticsContext::get().attach<Reason>("Unrecognized target machine").reportFatal();
+}
+
+CMMC_TARGET_NAMESPACE_END
